@@ -1,5 +1,6 @@
 // File: index.js
 const express = require('express');
+const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
 
 const app = express();
@@ -10,9 +11,12 @@ const supabaseUrl = 'YOUR_SUPABASE_URL';
 const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+// EJS and View Engine Setup
 app.set('view engine', 'ejs');
-app.set('views', './views'); // Vercel এর জন্য এটি দরকার
-app.use(express.static('public'));
+app.set('views', path.join(__dirname, 'views')); // Path explicitly set for Vercel
+
+// Static files (CSS, Images)
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -33,26 +37,31 @@ app.get('/', async (req, res) => {
             aboutMe: about ? about.content : "Welcome to my portfolio!"
         });
     } catch (error) {
-        res.status(500).send("Database Error: " + error.message);
+        console.error(error);
+        res.status(500).send("Database Connection Error");
     }
 });
 
 // 2. Admin Route
 app.get('/admin', async (req, res) => {
-    const { data: projects } = await supabase.from('projects').select('*').order('id', { ascending: false });
-    const { data: education } = await supabase.from('education').select('*').order('id', { ascending: false });
-    const { data: achievements } = await supabase.from('achievements').select('*').order('id', { ascending: false });
-    const { data: about } = await supabase.from('about').select('content').limit(1).maybeSingle();
+    try {
+        const { data: projects } = await supabase.from('projects').select('*').order('id', { ascending: false });
+        const { data: education } = await supabase.from('education').select('*').order('id', { ascending: false });
+        const { data: achievements } = await supabase.from('achievements').select('*').order('id', { ascending: false });
+        const { data: about } = await supabase.from('about').select('content').limit(1).maybeSingle();
 
-    res.render('admin', {
-        projects: projects || [],
-        education: education || [],
-        achievements: achievements || [],
-        aboutMe: about ? about.content : ""
-    });
+        res.render('admin', {
+            projects: projects || [],
+            education: education || [],
+            achievements: achievements || [],
+            aboutMe: about ? about.content : ""
+        });
+    } catch (error) {
+        res.status(500).send("Admin Access Error");
+    }
 });
 
-// 3. Fake Stats for Vercel (Vercel doesn't allow real-time server stats)
+// 3. Fake Stats for Vercel Dashboard
 app.get('/api/stats', (req, res) => {
     res.json({
         cpu: "Cloud",
@@ -74,26 +83,25 @@ app.post('/admin/update-about', async (req, res) => {
     res.redirect('/admin');
 });
 
-// 5. Add Project
+// 5. Add Content Routes
 app.post('/admin/add-project', async (req, res) => {
-    await supabase.from('projects').insert([{ 
-        title: req.body.title, 
-        description: req.body.description, 
-        link: req.body.link 
-    }]);
+    await supabase.from('projects').insert([{ title: req.body.title, description: req.body.description, link: req.body.link }]);
     res.redirect('/admin');
 });
 
-// Delete Achievement (Example)
-app.post('/admin/delete-achievement/:id', async (req, res) => {
-    await supabase.from('achievements').delete().eq('id', req.params.id);
+app.post('/admin/add-education', async (req, res) => {
+    await supabase.from('education').insert([{ degree: req.body.degree, institution: req.body.institution, year: req.body.year, description: req.body.description }]);
     res.redirect('/admin');
 });
 
-// Export for Vercel
-module.exports = app;
+app.post('/admin/add-achievement', async (req, res) => {
+    await supabase.from('achievements').insert([{ title: req.body.title, year: req.body.year, description: req.body.description }]);
+    res.redirect('/admin');
+});
 
-// Listen (Local Only)
+// Vercel handles the server start automatically, but for local testing:
 if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT, () => console.log(`Server: http://localhost:${PORT}`));
 }
+
+module.exports = app;
