@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" class="light scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = { darkMode: 'class' }
+    </script>
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-white transition-colors duration-300 font-sans">
+    
+    <nav class="p-5 shadow-md bg-white dark:bg-gray-800 transition-colors duration-300 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-400">My Portfolio</h1>
+            
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#about" class="font-semibold text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition">About</a>
+                <a href="#projects" class="font-semibold text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition">Projects</a>
+                <a href="#education" class="font-semibold text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition">Education</a>
+                <a href="#achievements" class="font-semibold text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition">Achievements</a>
+                
+                <button id="theme-toggle" class="ml-4 px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg font-semibold transition hover:bg-gray-300 dark:hover:bg-gray-600">
+                    🌙 Dark Mode
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="p-10 flex flex-col items-center justify-center mt-10 mb-10 text-center">
+        <h2 class="text-5xl font-extrabold mb-4">Welcome to My World</h2>
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl">
+            I am a passionate professional. Explore my projects, educational background, and recent achievements below.
+        </p>
+    </header>
+
+    <div class="container mx-auto px-6 pb-20">
+        
+        <section id="about" class="mb-16 pt-20">
+            <h3 class="text-3xl font-bold mb-8 border-b-2 border-indigo-500 inline-block pb-2">About Me</h3>
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+                <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap"><%= aboutMe %></p>
+            </div>
+        </section>
+
+        <section id="projects" class="mb-16 pt-20">
+            <h3 class="text-3xl font-bold mb-8 border-b-2 border-blue-500 inline-block pb-2">My Projects</h3>
+            <% if (projects.length > 0) { %>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <% projects.forEach(function(project) { %>
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow border border-gray-200 dark:border-gray-700">
+                            <h4 class="text-xl font-bold mb-2"><%= project.title %></h4>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4 h-24 overflow-hidden"><%= project.description %></p>
+                            <% if (project.link) { %>
+                                <a href="<%= project.link %>" target="_blank" class="text-blue-500 hover:text-blue-600 dark:hover:text-blue-400 font-semibold inline-flex items-center gap-1">
+                                    View Project <span>&rarr;</span>
+                                </a>
+                            <% } %>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <p class="text-gray-500 italic">No projects added yet.</p>
+            <% } %>
+        </section>
+
+        <section id="education" class="mb-16 pt-20">
+            <h3 class="text-3xl font-bold mb-8 border-b-2 border-purple-500 inline-block pb-2">Education</h3>
+            <% if (education.length > 0) { %>
+                <div class="flex flex-col gap-6">
+                    <% education.forEach(function(edu) { %>
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow border-l-4 border-purple-500 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div>
+                                <h4 class="text-xl font-bold"><%= edu.degree %></h4>
+                                <p class="text-lg text-gray-700 dark:text-gray-300 font-medium"><%= edu.institution %></p>
+                                <% if (edu.description) { %>
+                                    <p class="text-gray-600 dark:text-gray-400 mt-2"><%= edu.description %></p>
+                                <% } %>
+                            </div>
+                            <div class="bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-4 py-2 rounded-lg font-bold whitespace-nowrap">
+                                <%= edu.year %>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <p class="text-gray-500 italic">No education history added yet.</p>
+            <% } %>
+        </section>
+
+        <section id="achievements" class="pt-20">
+            <h3 class="text-3xl font-bold mb-8 border-b-2 border-green-500 inline-block pb-2">Achievements & Certifications</h3>
+            <% if (achievements.length > 0) { %>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <% achievements.forEach(function(achieve) { %>
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow border-l-4 border-green-500">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-xl font-bold"><%= achieve.title %></h4>
+                                <span class="text-sm font-bold bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-3 py-1 rounded-full"><%= achieve.year %></span>
+                            </div>
+                            <% if (achieve.description) { %>
+                                <p class="text-gray-600 dark:text-gray-400 mt-2"><%= achieve.description %></p>
+                            <% } %>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <p class="text-gray-500 italic">No achievements added yet.</p>
+            <% } %>
+        </section>
+
+    </div>
+
+    <footer class="bg-white dark:bg-gray-800 pt-10 pb-6 text-center border-t border-gray-200 dark:border-gray-700 mt-10 transition-colors duration-300">
+        <div class="flex justify-center space-x-8 mb-6">
+            <a href="https://github.com/" target="_blank" class="text-gray-500 hover:text-gray-900 dark:hover:text-white text-3xl transition duration-300 transform hover:scale-110"><i class="fab fa-github"></i></a>
+            <a href="https://facebook.com/" target="_blank" class="text-gray-500 hover:text-blue-600 dark:hover:text-blue-500 text-3xl transition duration-300 transform hover:scale-110"><i class="fab fa-facebook"></i></a>
+            <a href="https://instagram.com/" target="_blank" class="text-gray-500 hover:text-pink-600 dark:hover:text-pink-500 text-3xl transition duration-300 transform hover:scale-110"><i class="fab fa-instagram"></i></a>
+            <a href="https://linkedin.com/" target="_blank" class="text-gray-500 hover:text-blue-700 dark:hover:text-blue-600 text-3xl transition duration-300 transform hover:scale-110"><i class="fab fa-linkedin"></i></a>
+        </div>
+        <p class="text-gray-500 dark:text-gray-400 font-medium">&copy; 2024 My Portfolio. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const toggleBtn = document.getElementById('theme-toggle');
+        const htmlTag = document.documentElement;
+        toggleBtn.addEventListener('click', () => {
+            htmlTag.classList.toggle('dark');
+            toggleBtn.innerText = htmlTag.classList.contains('dark') ? '☀️ Light Mode' : '🌙 Dark Mode';
+        });
+    </script>
+</body>
+</html>

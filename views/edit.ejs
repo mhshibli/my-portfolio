@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Content</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class' }
+    </script>
+</head>
+<body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white transition-colors duration-300 font-sans min-h-screen">
+
+    <nav class="p-4 shadow-md bg-white dark:bg-gray-800 flex justify-between items-center transition-colors duration-300">
+        <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-400">Edit Content</h1>
+        <div class="flex gap-4">
+            <a href="/admin" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition">Back to Admin</a>
+            <button id="theme-toggle" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg font-semibold transition hover:bg-gray-300 dark:hover:bg-gray-600">
+                🌙 Dark Mode
+            </button>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-6 mt-10 max-w-2xl">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg transition-colors duration-300 border border-gray-200 dark:border-gray-700">
+            <h2 class="text-2xl font-bold mb-6 border-b pb-2 dark:border-gray-700">Update Information</h2>
+            
+            <form action="/admin/update-<%= type %>/<%= item.id %>" method="POST" class="flex flex-col gap-4">
+                
+                <% if (type === 'project') { %>
+                    <label class="font-bold text-gray-700 dark:text-gray-300">Project Title</label>
+                    <input type="text" name="title" value="<%= item.title %>" required class="p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white">
+                    
+                    <label class="font-bold text-gray-700 dark:text-gray-300">Description</label>
+                    <textarea name="description" required rows="4" class="p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white"><%= item.description %></textarea>
+                    
+                    <label class="font-bold text-gray-700 dark:text-gray-300">Link</label>
+                    <input type="url" name="link" value="<%= item.link %>" class="p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white">
+                
+                <% } else if (type === 'education') { %>
+                    <label class="font-bold text-gray-700 dark:text-gray-300">Degree</label>
+                    <input type="text" name="degree" value="<%= item.degree %>" required class="p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white">
+                    
+                    <label class="font-bold text-gray-700 dark:text-gray-300">Institution</label>
+                    <input type="text" name="institution" value="<%= item.institution %>" required class="p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white">
+                    
+                    <label class="font-bold text-gray-700 dark:text-gray-300">Year</label>
+                    <input type="text" name="year" value="<%= item.year %>" required class="p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white">
+                    
+                    <label class="font-bold text-gray-700 dark:text-gray-300">Description</label>
+                    <textarea name="description" rows="3" class="p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white"><%= item.description %></textarea>
+
+                <% } else if (type === 'achievement') { %>
+                    <label class="font-bold text-gray-700 dark:text-gray-300">Title</label>
+                    <input type="text" name="title" value="<%= item.title %>" required class="p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white">
+                    
+                    <label class="font-bold text-gray-700 dark:text-gray-300">Year</label>
+                    <input type="text" name="year" value="<%= item.year %>" required class="p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white">
+                    
+                    <label class="font-bold text-gray-700 dark:text-gray-300">Description</label>
+                    <textarea name="description" rows="3" class="p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white"><%= item.description %></textarea>
+                <% } %>
+
+                <button type="submit" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">Update Now</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const toggleBtn = document.getElementById('theme-toggle');
+        const htmlTag = document.documentElement;
+
+        toggleBtn.addEventListener('click', () => {
+            htmlTag.classList.toggle('dark');
+            toggleBtn.innerText = htmlTag.classList.contains('dark') ? '☀️ Light Mode' : '🌙 Dark Mode';
+        });
+    </script>
+</body>
+</html>
