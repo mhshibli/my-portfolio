@@ -1,22 +1,24 @@
 // File: index.js
 const express = require('express');
-const os = require('os'); // এটি ফাইলের একদম ওপরে বসাবেন (const express = require('express'); এর নিচে)
+const os = require('os'); // হার্ডওয়্যার ডাটা রিড করার জন্য
 const path = require('path');
 const session = require('express-session');
 const multer = require('multer');
 const { createClient } = require('@supabase/supabase-js');
 
 const app = express();
-// --- Real-Time Visitor Tracker ---
-let totalVisitors = 0; // আপনি চাইলে এটি 0 থেকেও শুরু করতে পারেন
 
-// কেউ সাইটে ভিজিট করলেই কাউন্ট ১ করে বাড়বে
+// --- Real-Time Visitor Tracker ---
+let totalVisitors = 1245; // আপনি চাইলে এটি 0 থেকেও শুরু করতে পারেন
+
+// কেউ সাইটে ভিজিট করলেই কাউন্ট ১ করে বাড়বে
 app.use((req, res, next) => {
     if (req.path === '/') {
         totalVisitors++;
     }
     next();
 });
+
 const PORT = process.env.PORT || 3000;
 
 // --- SUPABASE CONFIGURATION ---
@@ -82,7 +84,7 @@ app.post('/send-message', async (req, res) => {
     }
 });
 
-// ৩. লগইন এবং ফরগেট পাসওয়ার্ড
+// ৩. লগইন এবং ফরগেট পাসওয়ার্ড
 app.get('/login', (req, res) => res.render('login', { error: null }));
 
 app.post('/login', async (req, res) => {
@@ -107,6 +109,7 @@ app.post('/forgot-password', async (req, res) => {
     res.render('forgot-password', { error: "Wrong Secret Code!" });
 });
 
+
 // --- ADMIN ROUTES (PROTECTED) ---
 
 // এডমিন ড্যাশবোর্ড
@@ -127,6 +130,30 @@ app.get('/admin', isAuthenticated, async (req, res) => {
         aboutMe: ab ? ab.content : "" 
     });
 });
+
+// --- Real-time Hardware & Visitor Stats API ---
+app.get('/admin/api/server-stats', isAuthenticated, async (req, res) => {
+    try {
+        // 1. Original CPU Usage Approximation
+        const cores = os.cpus().length;
+        const cpuUsage = ((os.loadavg()[0] / cores) * 100).toFixed(1);
+
+        // 2. Original RAM Usage
+        const totalMem = os.totalmem();
+        const freeMem = os.freemem();
+        const usedRam = ((totalMem - freeMem) / (1024 * 1024 * 1024)).toFixed(2);
+
+        // 3. Send Real Data to Admin Panel
+        res.json({
+            cpu: cpuUsage,
+            ram: usedRam,
+            visitors: totalVisitors // অরিজিনাল ভিজিটর ডাটা পাঠানো হচ্ছে
+        });
+    } catch (error) {
+        res.status(500).json({ cpu: "0", ram: "0", visitors: "0" });
+    }
+});
+
 
 // ফটো আপলোড এবং ডেসক্রিপশন ম্যানেজমেন্ট
 app.post('/admin/upload-photo', isAuthenticated, upload.single('imageFile'), async (req, res) => {
@@ -166,17 +193,31 @@ app.post('/admin/delete-message/:id', isAuthenticated, async (req, res) => {
     res.redirect('/admin');
 });
 
-// এডুকেশন, প্রজেক্ট এবং অ্যাচিভমেন্ট ম্যানেজমেন্ট
+// --- EDUCATION ROUTES (Add, Update, Delete) ---
 app.post('/admin/add-education', isAuthenticated, async (req, res) => { await supabase.from('education').insert([req.body]); res.redirect('/admin'); });
+app.post('/admin/update-education/:id', isAuthenticated, async (req, res) => { 
+    await supabase.from('education').update({ degree: req.body.degree, institution: req.body.institution, year: req.body.year }).eq('id', req.params.id); 
+    res.redirect('/admin'); 
+});
 app.post('/admin/delete-education/:id', isAuthenticated, async (req, res) => { await supabase.from('education').delete().eq('id', req.params.id); res.redirect('/admin'); });
 
+// --- PROJECT ROUTES (Add, Update, Delete) ---
 app.post('/admin/add-project', isAuthenticated, async (req, res) => { await supabase.from('projects').insert([req.body]); res.redirect('/admin'); });
+app.post('/admin/update-project/:id', isAuthenticated, async (req, res) => { 
+    await supabase.from('projects').update({ title: req.body.title, description: req.body.description }).eq('id', req.params.id); 
+    res.redirect('/admin'); 
+});
 app.post('/admin/delete-project/:id', isAuthenticated, async (req, res) => { await supabase.from('projects').delete().eq('id', req.params.id); res.redirect('/admin'); });
 
+// --- ACHIEVEMENT ROUTES (Add, Update, Delete) ---
 app.post('/admin/add-achievement', isAuthenticated, async (req, res) => { await supabase.from('achievements').insert([req.body]); res.redirect('/admin'); });
+app.post('/admin/update-achievement/:id', isAuthenticated, async (req, res) => { 
+    await supabase.from('achievements').update({ title: req.body.title, year: req.body.year }).eq('id', req.params.id); 
+    res.redirect('/admin'); 
+});
 app.post('/admin/delete-achievement/:id', isAuthenticated, async (req, res) => { await supabase.from('achievements').delete().eq('id', req.params.id); res.redirect('/admin'); });
 
-// বায়ো আপডেট
+// বায়ো আপডেট
 app.post('/admin/update-about', isAuthenticated, async (req, res) => {
     const { data: ex } = await supabase.from('about').select('id').limit(1).maybeSingle();
     if (ex) await supabase.from('about').update({ content: req.body.content }).eq('id', ex.id);
@@ -184,7 +225,7 @@ app.post('/admin/update-about', isAuthenticated, async (req, res) => {
     res.redirect('/admin');
 });
 
-// এডমিন প্রোফাইল এবং পাসওয়ার্ড আপডেট
+// এডমিন প্রোফাইল এবং পাসওয়ার্ড আপডেট
 app.post('/admin/update-profile', isAuthenticated, async (req, res) => {
     const { new_username, new_password, new_secret } = req.body;
     const { data: config } = await supabase.from('admin_config').select('id').limit(1).single();
@@ -198,28 +239,8 @@ app.post('/admin/update-profile', isAuthenticated, async (req, res) => {
     }
 });
 
+// লগআউট
 app.get('/logout', (req, res) => req.session.destroy(() => res.redirect('/login')));
 
+// সার্ভার স্টার্ট
 app.listen(PORT, () => console.log(`Mahmudul Portfolio is running on port ${PORT}`));
-// --- Real-time Hardware & Visitor Stats API ---
-app.get('/admin/api/server-stats', isAuthenticated, async (req, res) => {
-    try {
-        // 1. Original CPU Usage Approximation
-        const cores = os.cpus().length;
-        const cpuUsage = ((os.loadavg()[0] / cores) * 100).toFixed(1);
-
-        // 2. Original RAM Usage
-        const totalMem = os.totalmem();
-        const freeMem = os.freemem();
-        const usedRam = ((totalMem - freeMem) / (1024 * 1024 * 1024)).toFixed(2);
-
-        // 3. Send Real Data to Admin Panel
-        res.json({
-            cpu: cpuUsage,
-            ram: usedRam,
-            visitors: totalVisitors // অরিজিনাল ভিজিটর ডাটা পাঠানো হচ্ছে
-        });
-    } catch (error) {
-        res.status(500).json({ cpu: "0", ram: "0", visitors: "0" });
-    }
-});
