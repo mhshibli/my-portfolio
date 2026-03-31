@@ -19,9 +19,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(session({
-    secret: 'portfolio_secure_2026',
-    resave: false,
-    saveUninitialized: false,
+    secret: 'portfolio_2026_secure',
+    resave: true,
+    saveUninitialized: true,
     cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }));
 
@@ -32,38 +32,34 @@ function isAuthenticated(req, res, next) {
 
 // --- ROUTES ---
 
-// ১. হোম পেজ (ডেটা দেখানো)
+// ১. হোম পেজ
 app.get('/', async (req, res) => {
-    try {
-        const { data: projects } = await supabase.from('projects').select('*').order('id', { ascending: false });
-        const { data: education } = await supabase.from('education').select('*').order('id', { ascending: false });
-        const { data: achievements } = await supabase.from('achievements').select('*').order('id', { ascending: false });
-        const { data: about } = await supabase.from('about').select('content').limit(1).maybeSingle();
+    const { data: p } = await supabase.from('projects').select('*').order('id', { ascending: false });
+    const { data: e } = await supabase.from('education').select('*').order('id', { ascending: false });
+    const { data: a } = await supabase.from('achievements').select('*').order('id', { ascending: false });
+    const { data: ab } = await supabase.from('about').select('content').limit(1).maybeSingle();
 
-        res.render('index', { 
-            projects: projects || [],
-            education: education || [],
-            achievements: achievements || [],
-            aboutMe: about ? about.content : "Welcome to my portfolio!"
-        });
-    } catch (e) { res.send("Error!"); }
+    res.render('index', { 
+        projects: p || [], education: e || [], achievements: a || [],
+        aboutMe: ab ? ab.content : "Welcome to my portfolio!"
+    });
 });
 
 // ২. লগইন
-app.get('/login', (req, res) => {
-    if (req.session.isLoggedIn) return res.redirect('/admin');
-    res.render('login', { error: null });
-});
+app.get('/login', (req, res) => res.render('login', { error: null }));
 
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
-    const { data: config } = await supabase.from('admin_config').select('*').limit(1).single();
-    if (config && username === config.username && password === config.password) {
-        req.session.isLoggedIn = true;
-        req.session.save(() => res.redirect('/admin'));
-    } else {
-        res.render('login', { error: "ইউজারনেম বা পাসওয়ার্ড ভুল!" });
+    const { data: config } = await supabase.from('admin_config').select('*');
+    
+    if (config && config.length > 0) {
+        const user = config[0];
+        if (username === user.username && password === user.password) {
+            req.session.isLoggedIn = true;
+            return req.session.save(() => res.redirect('/admin'));
+        }
     }
+    res.render('login', { error: "ইউজারনেম বা পাসওয়ার্ড ভুল!" });
 });
 
 app.get('/logout', (req, res) => {
@@ -72,56 +68,29 @@ app.get('/logout', (req, res) => {
 
 // ৩. এডমিন প্যানেল
 app.get('/admin', isAuthenticated, async (req, res) => {
-    const { data: projects } = await supabase.from('projects').select('*').order('id', { ascending: false });
-    const { data: education } = await supabase.from('education').select('*').order('id', { ascending: false });
-    const { data: achievements } = await supabase.from('achievements').select('*').order('id', { ascending: false });
-    const { data: about } = await supabase.from('about').select('content').limit(1).maybeSingle();
-    const { data: config } = await supabase.from('admin_config').select('username').limit(1).single();
+    const { data: p } = await supabase.from('projects').select('*').order('id', { ascending: false });
+    const { data: e } = await supabase.from('education').select('*').order('id', { ascending: false });
+    const { data: a } = await supabase.from('achievements').select('*').order('id', { ascending: false });
+    const { data: ab } = await supabase.from('about').select('content').limit(1).maybeSingle();
 
     res.render('admin', {
-        projects: projects || [],
-        education: education || [],
-        achievements: achievements || [],
-        aboutMe: about ? about.content : "",
-        currentAdmin: config ? config.username : "admin"
+        projects: p || [], education: e || [], achievements: a || [],
+        aboutMe: ab ? ab.content : "", currentAdmin: "Admin"
     });
 });
 
-// --- ডেটা আপডেট করার অ্যাকশনসমূহ (Fixed) ---
+// --- ডেটা অপারেশনস ---
 
 app.post('/admin/add-project', isAuthenticated, async (req, res) => {
-    const { title, description, link } = req.body;
-    await supabase.from('projects').insert([{ title, description, link }]);
-    res.redirect('/admin');
-});
-
-app.post('/admin/add-education', isAuthenticated, async (req, res) => {
-    const { degree, institution, year } = req.body;
-    await supabase.from('education').insert([{ degree, institution, year }]);
-    res.redirect('/admin');
-});
-
-app.post('/admin/add-achievement', isAuthenticated, async (req, res) => {
-    const { title, year } = req.body;
-    await supabase.from('achievements').insert([{ title, year }]);
+    await supabase.from('projects').insert([{ title: req.body.title, description: req.body.description, link: req.body.link }]);
     res.redirect('/admin');
 });
 
 app.post('/admin/update-about', isAuthenticated, async (req, res) => {
-    const { content } = req.body;
-    const { data: existing } = await supabase.from('about').select('id').limit(1).maybeSingle();
-    if (existing) await supabase.from('about').update({ content }).eq('id', existing.id);
-    else await supabase.from('about').insert([{ content }]);
+    const { data: ex } = await supabase.from('about').select('id').limit(1).maybeSingle();
+    if (ex) await supabase.from('about').update({ content: req.body.content }).eq('id', ex.id);
+    else await supabase.from('about').insert([{ content: req.body.content }]);
     res.redirect('/admin');
-});
-
-app.post('/admin/update-profile', isAuthenticated, async (req, res) => {
-    const { new_username, new_password } = req.body;
-    const { data: config } = await supabase.from('admin_config').select('id').limit(1).single();
-    if (config) {
-        await supabase.from('admin_config').update({ username: new_username, password: new_password }).eq('id', config.id);
-        req.session.destroy(() => res.send("<script>alert('Updated! Login again.'); window.location='/login';</script>"));
-    }
 });
 
 // Delete
@@ -130,4 +99,4 @@ app.post('/admin/delete-project/:id', isAuthenticated, async (req, res) => {
     res.redirect('/admin');
 });
 
-app.listen(PORT, () => console.log(`Live: http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Live at port ${PORT}`));
