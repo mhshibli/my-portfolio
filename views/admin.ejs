@@ -1,98 +1,153 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = { darkMode: 'class' }
-    </script>
 </head>
-<body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white transition-colors duration-300 font-sans">
+<body class="bg-gray-100 font-sans">
 
-    <nav class="p-4 shadow-md bg-white dark:bg-gray-800 flex justify-between items-center transition-colors duration-300 sticky top-0 z-50">
-        <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-400">Admin Dashboard</h1>
-        <div class="flex gap-4 items-center">
-            <span class="text-sm font-medium hidden md:block">User: <%= currentAdmin %></span>
-            <a href="/" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">View Site</a>
-            <a href="/logout" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">Logout</a>
-            <button id="theme-toggle" class="px-3 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg">🌙</button>
+    <nav class="bg-white shadow-lg p-4 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-blue-600 italic">Portfolio Admin</h1>
+            <div class="flex items-center gap-4">
+                <span class="text-gray-600 hidden md:block">Welcome, <b><%= currentAdmin %></b></span>
+                <a href="/" target="_blank" class="bg-blue-100 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-200 transition">View Site</a>
+                <a href="/logout" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">Logout</a>
+            </div>
         </div>
     </nav>
 
-    <div class="container mx-auto p-6 mt-4">
+    <div class="container mx-auto p-6">
         
-        <h2 class="text-xl font-bold mb-4 border-b pb-2 dark:border-gray-700">Update Personal Bio</h2>
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 text-center">
+            <div class="bg-white p-4 rounded-xl shadow">
+                <p class="text-gray-500 text-sm">CPU Usage</p>
+                <h3 id="cpu-val" class="text-xl font-bold text-blue-600">-- %</h3>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow">
+                <p class="text-gray-500 text-sm">RAM Used</p>
+                <h3 id="ram-val" class="text-xl font-bold text-green-600">-- GB</h3>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow">
+                <p class="text-gray-500 text-sm">Sys Load</p>
+                <h3 id="load-val" class="text-xl font-bold text-orange-600">--</h3>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow">
+                <p class="text-gray-500 text-sm">Visitors</p>
+                <h3 class="text-xl font-bold text-purple-600">Live</h3>
+            </div>
+        </div>
+
+        <section class="bg-white p-6 rounded-xl shadow-md mb-8">
+            <h2 class="text-lg font-bold mb-4 border-b pb-2"><i class="fas fa-user-edit mr-2"></i>Update Bio</h2>
             <form action="/admin/update-about" method="POST" class="flex flex-col gap-3">
-                <textarea name="content" required rows="3" class="p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 text-gray-900 dark:text-white"><%= aboutMe %></textarea>
-                <button type="submit" class="bg-indigo-600 text-white font-bold py-2 rounded px-6 self-start hover:bg-indigo-700 transition">Save About Me</button>
+                <textarea name="content" rows="3" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400" required><%= aboutMe %></textarea>
+                <button type="submit" class="bg-blue-600 text-white py-2 px-6 rounded-lg w-fit hover:bg-blue-700 transition">Update About Me</button>
             </form>
-        </div>
+        </section>
 
-        <h2 class="text-xl font-bold mb-4 border-b pb-2 dark:border-gray-700">Add New Content</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
-                <h3 class="font-bold mb-4 text-blue-500">Add Project</h3>
-                <form action="/admin/add-project" method="POST" class="flex flex-col gap-3">
-                    <input type="text" name="title" placeholder="Title" required class="p-2 border rounded dark:bg-gray-700 dark:border-gray-600">
-                    <textarea name="description" placeholder="Description" required rows="2" class="p-2 border rounded dark:bg-gray-700 dark:border-gray-600"></textarea>
-                    <input type="url" name="link" placeholder="Link (Optional)" class="p-2 border rounded dark:bg-gray-700 dark:border-gray-600">
-                    <button type="submit" class="bg-blue-600 text-white font-bold py-2 rounded">Save</button>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <section class="bg-white p-6 rounded-xl shadow-md">
+                <h2 class="text-lg font-bold mb-4 border-b pb-2 text-blue-600">Manage Projects</h2>
+                <form action="/admin/add-project" method="POST" class="mb-6 bg-gray-50 p-4 rounded-lg flex flex-col gap-3">
+                    <input type="text" name="title" placeholder="Project Title" required class="p-2 border rounded">
+                    <textarea name="description" placeholder="Short Description" class="p-2 border rounded"></textarea>
+                    <input type="url" name="link" placeholder="Link (Optional)" class="p-2 border rounded">
+                    <button type="submit" class="bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">+ Add Project</button>
                 </form>
-            </div>
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
-                <h3 class="font-bold mb-4 text-purple-500">Add Education</h3>
-                <form action="/admin/add-education" method="POST" class="flex flex-col gap-3">
-                    <input type="text" name="degree" placeholder="Degree" required class="p-2 border rounded dark:bg-gray-700 dark:border-gray-600">
-                    <input type="text" name="institution" placeholder="Institution" required class="p-2 border rounded dark:bg-gray-700 dark:border-gray-600">
-                    <input type="text" name="year" placeholder="Year" required class="p-2 border rounded dark:bg-gray-700 dark:border-gray-600">
-                    <button type="submit" class="bg-purple-600 text-white font-bold py-2 rounded">Save</button>
-                </form>
-            </div>
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
-                <h3 class="font-bold mb-4 text-green-500">Add Achievement</h3>
-                <form action="/admin/add-achievement" method="POST" class="flex flex-col gap-3">
-                    <input type="text" name="title" placeholder="Title" required class="p-2 border rounded dark:bg-gray-700 dark:border-gray-600">
-                    <input type="text" name="year" placeholder="Year" required class="p-2 border rounded dark:bg-gray-700 dark:border-gray-600">
-                    <button type="submit" class="bg-green-600 text-white font-bold py-2 rounded">Save</button>
-                </form>
-            </div>
-        </div>
 
-        <h2 class="text-xl font-bold mb-4 border-b pb-2 dark:border-gray-700">Account Settings</h2>
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md mb-12 border-t-4 border-orange-500 transition-colors">
-            <h3 class="font-bold mb-4 text-orange-500">Update Credentials</h3>
-            <form action="/admin/update-profile" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input type="text" name="new_username" placeholder="New Username" required class="p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600">
-                <input type="password" name="new_password" placeholder="New Password" required class="p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600">
-                <button type="submit" class="bg-orange-500 text-white font-bold py-3 rounded-lg md:col-span-2 hover:bg-orange-600 transition">Update Profile</button>
-            </form>
-        </div>
-
-        <h2 class="text-xl font-bold mb-4 border-b pb-2 dark:border-gray-700">Manage Content</h2>
-        <div class="grid grid-cols-1 gap-4 mb-20">
-            <% projects.forEach(item => { %>
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg flex justify-between items-center shadow-sm">
-                    <span><%= item.title %> (Project)</span>
-                    <form action="/admin/delete-project/<%= item.id %>" method="POST">
-                        <button type="submit" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
-                    </form>
+                <div class="space-y-3">
+                    <% projects.forEach(p => { %>
+                        <div class="flex justify-between items-center p-3 border rounded-lg bg-white hover:bg-gray-50">
+                            <div>
+                                <h4 class="font-bold"><%= p.title %></h4>
+                                <p class="text-xs text-gray-500"><%= p.link %></p>
+                            </div>
+                            <form action="/admin/delete-project/<%= p.id %>" method="POST" onsubmit="return confirm('Delete this project?')">
+                                <button type="submit" class="text-red-500 hover:text-red-700 p-2"><i class="fas fa-trash"></i></button>
+                            </form>
+                        </div>
+                    <% }) %>
                 </div>
-            <% }) %>
-        </div>
+            </section>
 
+            <section class="bg-white p-6 rounded-xl shadow-md">
+                <h2 class="text-lg font-bold mb-4 border-b pb-2 text-purple-600">Manage Education</h2>
+                <form action="/admin/add-education" method="POST" class="mb-6 bg-gray-50 p-4 rounded-lg flex flex-col gap-3">
+                    <input type="text" name="degree" placeholder="Degree (e.g. B.Sc)" required class="p-2 border rounded">
+                    <input type="text" name="institution" placeholder="University Name" required class="p-2 border rounded">
+                    <input type="text" name="year" placeholder="Year (e.g. 2022-2026)" required class="p-2 border rounded">
+                    <button type="submit" class="bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600">+ Add Education</button>
+                </form>
+
+                <div class="space-y-3">
+                    <% education.forEach(e => { %>
+                        <div class="flex justify-between items-center p-3 border rounded-lg bg-white">
+                            <div>
+                                <h4 class="font-bold"><%= e.degree %></h4>
+                                <p class="text-xs text-gray-500"><%= e.institution %> (<%= e.year %>)</p>
+                            </div>
+                            <form action="/admin/delete-education/<%= e.id %>" method="POST" onsubmit="return confirm('Delete this education?')">
+                                <button type="submit" class="text-red-500 hover:text-red-700 p-2"><i class="fas fa-trash"></i></button>
+                            </form>
+                        </div>
+                    <% }) %>
+                </div>
+            </section>
+
+            <section class="bg-white p-6 rounded-xl shadow-md">
+                <h2 class="text-lg font-bold mb-4 border-b pb-2 text-green-600">Manage Achievements</h2>
+                <form action="/admin/add-achievement" method="POST" class="mb-6 bg-gray-50 p-4 rounded-lg flex flex-col gap-3">
+                    <input type="text" name="title" placeholder="Achievement Name" required class="p-2 border rounded">
+                    <input type="text" name="year" placeholder="Year" required class="p-2 border rounded">
+                    <button type="submit" class="bg-green-500 text-white py-2 rounded-lg hover:bg-green-600">+ Add Achievement</button>
+                </form>
+
+                <div class="space-y-3">
+                    <% achievements.forEach(a => { %>
+                        <div class="flex justify-between items-center p-3 border rounded-lg bg-white">
+                            <div>
+                                <h4 class="font-bold"><%= a.title %></h4>
+                                <p class="text-xs text-gray-500"><%= a.year %></p>
+                            </div>
+                            <form action="/admin/delete-achievement/<%= a.id %>" method="POST" onsubmit="return confirm('Delete this achievement?')">
+                                <button type="submit" class="text-red-500 hover:text-red-700 p-2"><i class="fas fa-trash"></i></button>
+                            </form>
+                        </div>
+                    <% }) %>
+                </div>
+            </section>
+
+            <section class="bg-white p-6 rounded-xl shadow-md border-t-4 border-orange-500">
+                <h2 class="text-lg font-bold mb-4 border-b pb-2 text-orange-600">Account Credentials</h2>
+                <form action="/admin/update-profile" method="POST" class="flex flex-col gap-3">
+                    <label class="text-sm text-gray-500">New Username</label>
+                    <input type="text" name="new_username" placeholder="Change Username" required class="p-2 border rounded">
+                    <label class="text-sm text-gray-500">New Password</label>
+                    <input type="password" name="new_password" placeholder="Change Password" required class="p-3 border rounded-lg bg-gray-50 focus:bg-white">
+                    <button type="submit" class="bg-orange-500 text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition">Update Credentials</button>
+                </form>
+            </section>
+
+        </div>
     </div>
 
     <script>
-        const toggleBtn = document.getElementById('theme-toggle');
-        const htmlTag = document.documentElement;
-        toggleBtn.addEventListener('click', () => {
-            htmlTag.classList.toggle('dark');
-            toggleBtn.innerText = htmlTag.classList.contains('dark') ? '☀️' : '🌙';
-        });
+        async function updateStats() {
+            try {
+                const res = await fetch('/api/stats');
+                const data = await res.json();
+                document.getElementById('cpu-val').innerText = data.cpu + " %";
+                document.getElementById('ram-val').innerText = data.ramUsed + " / " + data.ramTotal + " GB";
+                document.getElementById('load-val').innerText = data.sysLoad;
+            } catch (err) { console.error("Stats fail"); }
+        }
+        setInterval(updateStats, 3000);
+        updateStats();
     </script>
 </body>
 </html>
