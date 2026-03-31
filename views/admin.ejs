@@ -112,6 +112,35 @@
             </div>
         </section>
 
+        <section class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border dark:border-gray-700 mt-10">
+            <h2 class="font-black text-blue-600 mb-6 uppercase tracking-widest border-b pb-2">Inbox (Visitor Messages)</h2>
+            <div class="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+                <% if (messages && messages.length > 0) { %>
+                    <% messages.forEach(m => { %>
+                    <div class="p-6 border dark:border-gray-700 rounded-2xl bg-gray-50 dark:bg-gray-900/50 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h4 class="font-bold text-lg text-blue-500"><%= m.name %></h4>
+                                <p class="text-xs text-gray-500"><%= m.email %></p>
+                                <p class="text-[10px] text-gray-400 mt-1"><%= new Date(m.created_at).toLocaleString() %></p>
+                            </div>
+                            <form action="/admin/delete-message/<%= m.id %>" method="POST">
+                                <button type="submit" class="text-red-500 hover:bg-red-50 p-2 rounded-full transition">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </div>
+                        <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed border-t dark:border-gray-700 pt-3">
+                            <%= m.message %>
+                        </p>
+                    </div>
+                    <% }) %>
+                <% } else { %>
+                    <p class="text-center text-gray-400 py-10 italic">No messages in your inbox yet.</p>
+                <% } %>
+            </div>
+        </section>
+
         <section class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border-t-8 border-orange-500">
             <h2 class="font-black text-orange-600 mb-6 uppercase tracking-widest border-b pb-2">Admin Account & Credentials</h2>
             <form action="/admin/update-profile" method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-4">
