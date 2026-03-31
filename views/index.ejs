@@ -43,19 +43,6 @@
             </div>
         </section>
 
-        <section id="gallery">
-            <h2 class="text-3xl font-bold mb-10 border-l-8 border-orange-500 pl-4">Photo Gallery</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <% gallery.forEach(img => { %>
-                <div class="group relative overflow-hidden rounded-2xl aspect-square bg-gray-200 dark:bg-gray-800 shadow-md">
-                    <img src="<%= img.image_url %>" alt="<%= img.caption %>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4">
-                        <p class="text-white text-center text-sm font-bold"><%= img.caption %></p>
-                    </div>
-                </div>
-                <% }) %>
-            </div>
-        </section>
 
         <section id="projects">
             <h2 class="text-3xl font-bold mb-10 border-l-8 border-blue-600 pl-4">My Projects</h2>
@@ -79,6 +66,19 @@
                 <h2 class="text-3xl font-bold mb-10 border-l-8 border-green-600 pl-4">Achievements</h2>
                 <div class="space-y-6"><% achievements.forEach(a => { %><div class="bg-white dark:bg-gray-800 p-6 rounded-2xl border-l-8 border-green-500 shadow-sm"><h4 class="font-bold text-xl"><%= a.title %></h4><p class="text-gray-500 dark:text-gray-400">Received in: <%= a.year %></p></div><% }) %></div>
             </section>
+                    <section id="gallery">
+            <h2 class="text-3xl font-bold mb-10 border-l-8 border-orange-500 pl-4">Photo Gallery</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <% gallery.forEach(img => { %>
+                <div class="group relative overflow-hidden rounded-2xl aspect-square bg-gray-200 dark:bg-gray-800 shadow-md">
+                    <img src="<%= img.image_url %>" alt="<%= img.caption %>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4">
+                        <p class="text-white text-center text-sm font-bold"><%= img.caption %></p>
+                    </div>
+                </div>
+                <% }) %>
+            </div>
+        </section>
         </div>
     </main>
 
