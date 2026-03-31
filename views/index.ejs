@@ -9,119 +9,166 @@
     <script>tailwind.config = { darkMode: 'class' }</script>
     <style>
         html { scroll-behavior: smooth; }
-        .gallery-item.hidden-photo { display: none; }
-        #lightbox { transition: opacity 0.3s ease; }
+        .hidden-modal { display: none; }
+        .visible-modal { display: flex; }
+        /* কাস্টম স্ক্রলবার ফর গ্যালারি মডাল */
+        #all-photos-modal::-webkit-scrollbar { width: 8px; }
+        #all-photos-modal::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 flex flex-col min-h-screen transition-colors duration-300">
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen">
 
     <nav class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md sticky top-0 z-50 border-b dark:border-gray-700">
         <div class="container mx-auto px-4 py-4 flex items-center justify-between">
             <a href="#" class="text-2xl font-bold text-blue-600 dark:text-blue-400 tracking-tighter uppercase">MAHMUDUL</a>
-            <div class="flex items-center gap-4">
-                <button id="theme-toggle" class="p-2 rounded-xl bg-gray-100 dark:bg-gray-700"><span id="theme-icon">🌙</span></button>
+            
+            <div class="hidden md:flex items-center gap-8 font-semibold text-xs uppercase tracking-widest">
+                <a href="#education" class="hover:text-blue-600 transition">Education</a>
+                <a href="#projects" class="hover:text-blue-600 transition">Projects & Work</a>
+                <a href="#achievements" class="hover:text-blue-600 transition">Achievements</a>
+                <a href="#gallery" class="hover:text-blue-600 transition">Gallery</a>
             </div>
+
+            <button id="theme-toggle" class="p-2 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                <span id="theme-icon">🌙</span>
+            </button>
         </div>
     </nav>
 
     <main class="flex-grow container mx-auto px-4 py-12 space-y-24">
-        
-        <section id="about" class="max-w-4xl mx-auto text-center">
-            <h2 class="text-4xl font-black mb-8 uppercase">About Me</h2>
-            <div class="p-8 bg-white dark:bg-gray-800 rounded-3xl shadow-sm border dark:border-gray-700">
-                <p class="text-xl italic">"<%= aboutMe %>"</p>
-            </div>
-        </section>
 
-        <section id="gallery">
-            <div class="flex justify-between items-end mb-10 border-l-8 border-orange-500 pl-4">
-                <h2 class="text-3xl font-bold uppercase">Gallery</h2>
-                <button id="view-more-btn" class="text-orange-500 font-bold hover:underline flex items-center gap-2">
-                    SEE MORE <i id="arrow-icon" class="fas fa-chevron-down"></i>
-                </button>
-            </div>
-            
-            <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                <% gallery.forEach((img, index) => { %>
-                <div class="gallery-item group relative overflow-hidden rounded-2xl aspect-square bg-gray-200 dark:bg-gray-800 shadow-md cursor-pointer <%= index >= 4 ? 'hidden-photo' : '' %>" 
-                     onclick="openLightbox('<%= img.image_url %>', '<%= img.caption %>', '<%= img.description %>')">
-                    <img src="<%= img.image_url %>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <span class="text-white font-bold text-sm uppercase">View Details</span>
-                    </div>
+        <section id="education">
+            <h2 class="text-3xl font-black mb-10 border-l-8 border-purple-600 pl-4 uppercase tracking-tight">Education</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <% education.forEach(e => { %>
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl border-l-8 border-purple-500 shadow-sm hover:shadow-md transition">
+                    <h4 class="font-bold text-2xl mb-2"><%= e.degree %></h4>
+                    <p class="text-gray-600 dark:text-gray-400 font-semibold"><%= e.institution %></p>
+                    <p class="text-gray-400 text-sm mt-2"><i class="far fa-calendar-alt mr-2"></i><%= e.year %></p>
                 </div>
                 <% }) %>
             </div>
         </section>
 
-        <section id="education">
-            <h2 class="text-3xl font-bold mb-10 border-l-8 border-purple-600 pl-4 uppercase">Education</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <% education.forEach(e => { %>
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl border-l-8 border-purple-500 shadow-sm"><h4 class="font-bold text-2xl mb-2"><%= e.degree %></h4><p class="text-gray-500"><%= e.institution %> • <%= e.year %></p></div>
+        <section id="projects">
+            <h2 class="text-3xl font-black mb-10 border-l-8 border-blue-600 pl-4 uppercase tracking-tight">Projects & Work</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <% projects.forEach(p => { %>
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-xl transition duration-300">
+                    <h3 class="text-2xl font-bold mb-3 text-blue-600 dark:text-blue-400"><%= p.title %></h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6 text-sm leading-relaxed"><%= p.description %></p>
+                    <% if(p.link) { %>
+                        <a href="<%= p.link %>" target="_blank" class="inline-flex items-center gap-2 text-xs font-bold text-blue-500 hover:text-blue-700 uppercase">
+                            View Project <i class="fas fa-external-link-alt text-[10px]"></i>
+                        </a>
+                    <% } %>
+                </div>
                 <% }) %>
             </div>
         </section>
 
         <section id="achievements">
-            <h2 class="text-3xl font-bold mb-10 border-l-8 border-green-600 pl-4 uppercase">Achievements</h2>
+            <h2 class="text-3xl font-black mb-10 border-l-8 border-green-600 pl-4 uppercase tracking-tight">Achievements & Certifications</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <% achievements.forEach(a => { %>
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl border-l-8 border-green-500 shadow-sm flex justify-between items-start"><h4 class="font-bold text-xl"><%= a.title %></h4><i class="fas fa-certificate text-green-500 text-2xl"></i></div>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl border-l-8 border-green-500 shadow-sm flex items-center justify-between">
+                    <div>
+                        <h4 class="font-bold text-lg"><%= a.title %></h4>
+                        <p class="text-gray-400 text-xs">Year: <%= a.year %></p>
+                    </div>
+                    <i class="fas fa-award text-green-500 text-2xl"></i>
+                </div>
                 <% }) %>
             </div>
         </section>
+
+        <section id="gallery">
+            <div class="flex justify-between items-end mb-10 border-l-8 border-orange-500 pl-4">
+                <h2 class="text-3xl font-black uppercase tracking-tight">Photo Gallery</h2>
+                <button onclick="toggleGalleryModal()" class="bg-orange-500 text-white px-6 py-2 rounded-full font-bold text-sm hover:bg-orange-600 transition shadow-lg flex items-center gap-2">
+                    SEE MORE <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <% gallery.slice(0, 4).forEach(img => { %>
+                <div class="relative group overflow-hidden rounded-2xl aspect-square cursor-pointer shadow-md" onclick="toggleGalleryModal()">
+                    <img src="<%= img.image_url %>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-all"></div>
+                </div>
+                <% }) %>
+            </div>
+        </section>
+
     </main>
 
-    <div id="lightbox" class="fixed inset-0 bg-black/90 z-[100] hidden items-center justify-center p-4" onclick="closeLightbox()">
-        <div class="max-w-4xl w-full bg-white dark:bg-gray-900 rounded-3xl overflow-hidden" onclick="event.stopPropagation()">
-            <img id="lightbox-img" src="" class="w-full max-h-[70vh] object-contain bg-black">
-            <div class="p-6">
-                <h3 id="lightbox-title" class="text-2xl font-bold text-blue-600 mb-2"></h3>
-                <p id="lightbox-desc" class="text-gray-600 dark:text-gray-400 leading-relaxed"></p>
-                <button onclick="closeLightbox()" class="mt-4 text-sm font-bold text-gray-500 uppercase hover:text-red-500 transition">Close <i class="fas fa-times"></i></button>
+    <div id="all-photos-modal" class="fixed inset-0 bg-white dark:bg-gray-900 z-[100] hidden flex-col overflow-y-auto">
+        <div class="sticky top-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md p-6 border-b dark:border-gray-700 flex justify-between items-center">
+            <h2 class="text-2xl font-black uppercase text-orange-500">All Photos</h2>
+            <button onclick="toggleGalleryModal()" class="text-gray-500 hover:text-red-500 text-3xl transition">
+                <i class="fas fa-times-circle"></i>
+            </button>
+        </div>
+        
+        <div class="container mx-auto p-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <% gallery.forEach(img => { %>
+                <div class="relative group overflow-hidden rounded-xl aspect-square cursor-pointer border dark:border-gray-700" 
+                     onclick="showFullImage('<%= img.image_url %>', '<%= img.caption %>', '<%= img.description %>')">
+                    <img src="<%= img.image_url %>" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <i class="fas fa-search-plus text-white text-2xl"></i>
+                    </div>
+                </div>
+                <% }) %>
             </div>
         </div>
     </div>
 
-    <footer class="bg-white dark:bg-gray-800 border-t dark:border-gray-700 py-12 text-center">
+    <div id="full-image-overlay" class="fixed inset-0 bg-black/95 z-[200] hidden items-center justify-center p-4" onclick="closeFullImage()">
+        <div class="max-w-5xl w-full bg-white dark:bg-gray-800 rounded-3xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+            <img id="display-img" src="" class="w-full max-h-[70vh] object-contain bg-black">
+            <div class="p-8">
+                <h3 id="display-title" class="text-3xl font-bold text-blue-600 mb-3"></h3>
+                <p id="display-desc" class="text-gray-600 dark:text-gray-400 text-lg leading-relaxed"></p>
+                <button onclick="closeFullImage()" class="mt-6 text-red-500 font-black uppercase text-sm flex items-center gap-2">
+                    <i class="fas fa-times"></i> Close Preview
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white dark:bg-gray-800 border-t dark:border-gray-700 py-12 text-center mt-20">
         <p class="text-gray-500 font-semibold">&copy; 2026 <span class="text-blue-600">Mahmudul Hasan</span>. All Rights Reserved.</p>
     </footer>
 
     <script>
-        // View More Toggle
-        const btn = document.getElementById('view-more-btn');
-        const arrow = document.getElementById('arrow-icon');
-        const hiddenPhotos = document.querySelectorAll('.hidden-photo');
-        let isOpen = false;
-
-        btn.onclick = () => {
-            isOpen = !isOpen;
-            hiddenPhotos.forEach(p => p.style.display = isOpen ? 'block' : 'none');
-            arrow.className = isOpen ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
-            btn.firstChild.textContent = isOpen ? 'SEE LESS ' : 'SEE MORE ';
-        };
-
-        // Lightbox Functions
-        function openLightbox(url, title, desc) {
-            document.getElementById('lightbox-img').src = url;
-            document.getElementById('lightbox-title').innerText = title;
-            document.getElementById('lightbox-desc').innerText = desc || "No details available.";
-            document.getElementById('lightbox').classList.remove('hidden');
-            document.getElementById('lightbox').classList.add('flex');
-        }
-
-        function closeLightbox() {
-            document.getElementById('lightbox').classList.add('hidden');
-            document.getElementById('lightbox').classList.remove('flex');
-        }
-
-        // Dark Mode
-        const themeToggle = document.getElementById('theme-toggle'), themeIcon = document.getElementById('theme-icon'), html = document.documentElement;
+        // ১. ডার্ক মোড লজিক
+        const themeBtn = document.getElementById('theme-toggle'), themeIcon = document.getElementById('theme-icon'), html = document.documentElement;
         if(localStorage.theme === 'dark') { html.classList.add('dark'); themeIcon.innerText = '☀️'; }
-        themeToggle.onclick = () => {
+        themeBtn.onclick = () => {
             html.classList.toggle('dark'); const isD = html.classList.contains('dark');
             localStorage.theme = isD ? 'dark' : 'light'; themeIcon.innerText = isD ? '☀️' : '🌙';
+        }
+
+        // ২. গ্যালারি মডাল (See More Page) টগল
+        function toggleGalleryModal() {
+            const modal = document.getElementById('all-photos-modal');
+            modal.classList.toggle('hidden');
+            modal.classList.toggle('flex');
+            document.body.style.overflow = modal.classList.contains('hidden') ? 'auto' : 'hidden';
+        }
+
+        // ৩. বড় ছবি দেখানো (Full Image Preview)
+        function showFullImage(url, title, desc) {
+            document.getElementById('display-img').src = url;
+            document.getElementById('display-title').innerText = title;
+            document.getElementById('display-desc').innerText = desc || "No description provided.";
+            document.getElementById('full-image-overlay').classList.replace('hidden', 'flex');
+        }
+
+        function closeFullImage() {
+            document.getElementById('full-image-overlay').classList.replace('flex', 'hidden');
         }
     </script>
 </body>
