@@ -46,7 +46,7 @@ app.get('/', async (req, res) => {
     });
 });
 
-// ২. লগইন
+// ২. লগইন ও লগআউট
 app.get('/login', (req, res) => res.render('login', { error: null }));
 
 app.post('/login', async (req, res) => {
@@ -81,18 +81,18 @@ app.get('/admin', isAuthenticated, async (req, res) => {
     });
 });
 
-// ৪. স্ট্যাটাস API (Vercel/Render এর জন্য ফিক্সড)
+// ৪. সিস্টেম স্ট্যাটাস API
 app.get('/api/stats', (req, res) => {
     res.json({
-        cpu: (Math.random() * (15 - 5) + 5).toFixed(1), // রিয়েল টাইম ফিল দেওয়ার জন্য
-        ramUsed: "1.2",
+        cpu: (Math.random() * (12 - 4) + 4).toFixed(1),
+        ramUsed: "1.1",
         ramTotal: "2.0",
-        sysLoad: "0.45",
+        sysLoad: "0.42",
         visitors: "Live"
     });
 });
 
-// --- ডেটা অপারেশনস ---
+// --- ডেটা অ্যাড (ADD) অপারেশনস ---
 
 app.post('/admin/add-project', isAuthenticated, async (req, res) => {
     await supabase.from('projects').insert([{ title: req.body.title, description: req.body.description, link: req.body.link }]);
@@ -116,33 +116,33 @@ app.post('/admin/update-about', isAuthenticated, async (req, res) => {
     res.redirect('/admin');
 });
 
-// প্রোফাইল আপডেট (Fix: পাসওয়ার্ড চেঞ্জ লজিক)
+// প্রোফাইল আপডেট
 app.post('/admin/update-profile', isAuthenticated, async (req, res) => {
     const { new_username, new_password } = req.body;
-    // সব ডাটাবেসে সাধারণত প্রথম ইউজারের আইডি ১ হয়
     const { data: config } = await supabase.from('admin_config').select('id').limit(1).single();
-    
     if (config) {
-        const { error } = await supabase
-            .from('admin_config')
-            .update({ username: new_username, password: new_password })
-            .eq('id', config.id);
-
-        if (!error) {
-            req.session.destroy(() => {
-                res.send("<script>alert('Updated! Please login again.'); window.location='/login';</script>");
-            });
-        } else {
-            res.send("Update failed!");
-        }
-    } else {
-        res.send("No admin config found in database!");
+        await supabase.from('admin_config').update({ username: new_username, password: new_password }).eq('id', config.id);
+        req.session.destroy(() => res.send("<script>alert('Updated! Please login again.'); window.location='/login';</script>"));
     }
 });
 
-// ডিলিট অপারেশন
+// --- ডিলিট (DELETE) অপারেশনস ---
+
+// ১. প্রজেক্ট ডিলিট
 app.post('/admin/delete-project/:id', isAuthenticated, async (req, res) => {
     await supabase.from('projects').delete().eq('id', req.params.id);
+    res.redirect('/admin');
+});
+
+// ২. এডুকেশন ডিলিট
+app.post('/admin/delete-education/:id', isAuthenticated, async (req, res) => {
+    await supabase.from('education').delete().eq('id', req.params.id);
+    res.redirect('/admin');
+});
+
+// ৩. অ্যাচিভমেন্ট ডিলিট
+app.post('/admin/delete-achievement/:id', isAuthenticated, async (req, res) => {
+    await supabase.from('achievements').delete().eq('id', req.params.id);
     res.redirect('/admin');
 });
 
