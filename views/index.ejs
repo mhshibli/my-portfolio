@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mahmudul Hasan | Portfolio</title>
+    <title>My Portfolio | Ahmedul Hasan</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -13,15 +13,31 @@
         html { scroll-behavior: smooth; }
         .social-icon { transition: all 0.3s ease; }
         .social-icon:hover { transform: translateY(-5px); }
+        
+        /* ডেস্কটপ মোডে ডার্ক মোড বাটনকে ডানে নেওয়ার জন্য বিশেষ স্টাইল */
+        @media (min-width: 768px) {
+            .desktop-theme-wrapper {
+                order: 10;
+                margin-left: auto;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen">
 
     <nav class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md sticky top-0 z-50 border-b dark:border-gray-700">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-blue-600 dark:text-blue-400 tracking-tighter">MAHMUDUL HASAN</a>
+        <div class="container mx-auto px-4 py-4 flex items-center justify-between md:justify-start">
             
-            <div class="flex items-center gap-3">
+            <a href="#" class="text-2xl font-bold text-blue-600 dark:text-blue-400 tracking-tighter mr-10">AHMEDUL</a>
+            
+            <div class="hidden md:flex items-center gap-8 font-semibold text-sm uppercase tracking-wide">
+                <a href="#about" class="hover:text-blue-600 transition">About</a>
+                <a href="#projects" class="hover:text-blue-600 transition">Projects</a>
+                <a href="#education" class="hover:text-blue-600 transition">Education</a>
+                <a href="#achievements" class="hover:text-blue-600 transition">Achievements</a>
+            </div>
+
+            <div class="flex items-center gap-3 desktop-theme-wrapper">
                 <button id="theme-toggle" class="p-2 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition">
                     <span id="theme-icon" class="text-lg">🌙</span>
                 </button>
@@ -30,14 +46,6 @@
                     <i class="fas fa-bars text-2xl"></i>
                 </button>
             </div>
-
-            <div class="hidden md:flex items-center gap-8 font-semibold text-sm uppercase tracking-wide">
-                <a href="#about" class="hover:text-blue-600 transition">About</a>
-                <a href="#projects" class="hover:text-blue-600 transition">Projects</a>
-                <a href="#education" class="hover:text-blue-600 transition">Education</a>
-                <a href="#achievements" class="hover:text-blue-600 transition">Achievements</a>
-                <a href="/login" class="bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-700 transition shadow-md">Admin</a>
-            </div>
         </div>
 
         <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 border-t dark:border-gray-700 px-6 py-8 space-y-5 shadow-2xl absolute w-full left-0">
@@ -45,7 +53,6 @@
             <a href="#projects" class="block text-lg font-medium">My Projects</a>
             <a href="#education" class="block text-lg font-medium">Education</a>
             <a href="#achievements" class="block text-lg font-medium">Achievements</a>
-            <a href="/login" class="block text-lg font-bold text-blue-600 border-t pt-4">Admin Dashboard</a>
         </div>
     </nav>
 
@@ -111,29 +118,30 @@
                 <a href="https://github.com/mhshibli" target="_blank" class="social-icon text-3xl text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white">
                     <i class="fab fa-github"></i>
                 </a>
-                <a href="https://facebook.com/yourusername" target="_blank" class="social-icon text-3xl text-gray-600 dark:text-gray-400 hover:text-blue-600">
+                <a href="https://facebook.com" target="_blank" class="social-icon text-3xl text-gray-600 dark:text-gray-400 hover:text-blue-600">
                     <i class="fab fa-facebook"></i>
                 </a>
-                <a href="https://instagram.com/yourusername" target="_blank" class="social-icon text-3xl text-gray-600 dark:text-gray-400 hover:text-pink-500">
+                <a href="https://instagram.com" target="_blank" class="social-icon text-3xl text-gray-600 dark:text-gray-400 hover:text-pink-500">
                     <i class="fab fa-instagram"></i>
                 </a>
-                <a href="https://linkedin.com/in/yourusername" target="_blank" class="social-icon text-3xl text-gray-600 dark:text-gray-400 hover:text-blue-700">
+                <a href="https://linkedin.com" target="_blank" class="social-icon text-3xl text-gray-600 dark:text-gray-400 hover:text-blue-700">
                     <i class="fab fa-linkedin"></i>
                 </a>
             </div>
 
             <div class="space-y-2">
                 <p class="text-gray-500 dark:text-gray-400 font-semibold">
-                    &copy; <span id="footer-year"></span> <span class="text-blue-600"> Mahmudul Hasan</span>. All Rights Reserved.
+                    &copy; <span id="footer-year"></span> <span class="text-blue-600">Ahmedul Hasan</span>. All Rights Reserved.
                 </p>
-                
+                <p class="text-[10px] text-gray-400 uppercase tracking-[0.3em]">Crafted with Node.js & Supabase</p>
             </div>
         </div>
     </footer>
 
     <script>
         // 1. Footer Year
-        document.getElementById('footer-year').innerText = new Date().getFullYear();
+        const yearEl = document.getElementById('footer-year');
+        if(yearEl) yearEl.innerText = new Date().getFullYear();
 
         // 2. Mobile Menu Toggle
         const menuBtn = document.getElementById('menu-btn');
@@ -149,7 +157,6 @@
         const themeIcon = document.getElementById('theme-icon');
         const html = document.documentElement;
 
-        // Load saved theme
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             html.classList.add('dark');
             if(themeIcon) themeIcon.innerText = '☀️';
