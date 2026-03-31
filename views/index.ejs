@@ -9,6 +9,7 @@
     <script>tailwind.config = { darkMode: 'class' }</script>
     <style>
         html { scroll-behavior: smooth; }
+        .nav-link.active { color: #f97316 !important; font-weight: 800; border-bottom: 2px solid #f97316; }
         .hidden-photo { display: none; }
     </style>
 </head>
@@ -18,89 +19,82 @@
         <div class="container mx-auto px-4 py-4 flex items-center justify-between">
             <a href="#" class="text-2xl font-bold text-blue-600 dark:text-blue-400 tracking-tighter uppercase">MAHMUDUL</a>
             
-            <div class="hidden md:flex items-center gap-6 font-semibold text-xs uppercase tracking-widest">
-                <a href="#about" class="hover:text-blue-600 transition">About</a>
-                <a href="#education" class="hover:text-blue-600 transition">Education</a>
-                <a href="#projects" class="hover:text-blue-600 transition">Projects</a>
-                <a href="#achievements" class="hover:text-blue-600 transition">Achievements</a>
-                <a href="#gallery" class="hover:text-blue-600 transition text-orange-500">Gallery</a>
+            <div id="desktop-menu" class="hidden md:flex items-center gap-6 font-semibold text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400">
+                <a href="#about" class="nav-link hover:text-orange-500 transition px-1">About</a>
+                <a href="#education" class="nav-link hover:text-orange-500 transition px-1">Education</a>
+                <a href="#projects" class="nav-link hover:text-orange-500 transition px-1">Projects</a>
+                <a href="#achievements" class="nav-link hover:text-orange-500 transition px-1">Achievements</a>
+                <a href="#gallery" class="nav-link hover:text-orange-500 transition px-1">Gallery</a>
             </div>
 
             <div class="flex items-center gap-3">
                 <button id="theme-toggle" class="p-2 rounded-xl bg-gray-100 dark:bg-gray-700"><span id="theme-icon">🌙</span></button>
-                <button id="menu-btn" class="md:hidden p-2 text-gray-600 dark:text-gray-300 focus:outline-none">
-                    <i class="fas fa-bars text-2xl"></i>
-                </button>
+                <button id="menu-btn" class="md:hidden p-2 text-gray-600 dark:text-gray-300"><i class="fas fa-bars text-2xl"></i></button>
             </div>
         </div>
 
         <div id="mobile-menu" class="hidden flex-col bg-white dark:bg-gray-800 border-t dark:border-gray-700 px-6 py-6 space-y-4 shadow-xl">
-            <a href="#about" class="block font-medium">About Me</a>
-            <a href="#education" class="block font-medium">Education</a>
-            <a href="#projects" class="block font-medium">Projects & Work</a>
-            <a href="#achievements" class="block font-medium">Achievements</a>
-            <a href="#gallery" class="block font-medium text-orange-500">Photo Gallery</a>
+            <a href="#about" class="nav-link block font-medium">About Me</a>
+            <a href="#education" class="nav-link block font-medium">Education</a>
+            <a href="#projects" class="nav-link block font-medium">Projects & Work</a>
+            <a href="#achievements" class="nav-link block font-medium">Achievements</a>
+            <a href="#gallery" class="nav-link block font-medium text-orange-500">Photo Gallery</a>
         </div>
     </nav>
 
-    <main class="flex-grow container mx-auto px-4 py-12 space-y-24">
+    <main class="flex-grow container mx-auto px-4 py-12 space-y-32">
 
-        <section id="about" class="max-w-4xl mx-auto text-center py-10">
+        <section id="about" class="max-w-4xl mx-auto text-center py-10 section">
             <h2 class="text-4xl font-black mb-8 uppercase tracking-tighter border-b-4 border-blue-600 inline-block">About Me</h2>
-            <div class="p-8 bg-white dark:bg-gray-800 rounded-3xl shadow-sm border dark:border-gray-700 mt-6">
-                <p class="text-xl italic leading-relaxed text-gray-700 dark:text-gray-300">"<%= aboutMe %>"</p>
+            <div class="p-8 bg-white dark:bg-gray-800 rounded-3xl shadow-sm border dark:border-gray-700 mt-6 italic text-xl">
+                "<%= aboutMe %>"
             </div>
         </section>
 
-        <section id="education">
-            <h2 class="text-3xl font-black mb-10 border-l-8 border-purple-600 pl-4 uppercase tracking-tight">Education</h2>
+        <section id="education" class="section">
+            <h2 class="text-3xl font-black mb-10 border-l-8 border-purple-600 pl-4 uppercase">Education</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <% education.forEach(e => { %>
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl border-l-8 border-purple-500 shadow-sm hover:translate-x-2 transition-transform">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl border-l-8 border-purple-500 shadow-sm">
                     <h4 class="font-bold text-2xl mb-2"><%= e.degree %></h4>
-                    <p class="text-gray-600 dark:text-gray-400 font-semibold"><%= e.institution %></p>
-                    <p class="text-gray-400 text-sm mt-2"><i class="far fa-calendar-alt mr-2"></i><%= e.year %></p>
+                    <p class="text-gray-600 dark:text-gray-400"><%= e.institution %> • <%= e.year %></p>
                 </div>
                 <% }) %>
             </div>
         </section>
 
-        <section id="projects">
-            <h2 class="text-3xl font-black mb-10 border-l-8 border-blue-600 pl-4 uppercase tracking-tight">Projects & Work</h2>
+        <section id="projects" class="section">
+            <h2 class="text-3xl font-black mb-10 border-l-8 border-blue-600 pl-4 uppercase">Projects & Work</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <% projects.forEach(p => { %>
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border dark:border-gray-700 hover:shadow-xl transition">
                     <h3 class="text-2xl font-bold mb-3 text-blue-600 dark:text-blue-400"><%= p.title %></h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-6 text-sm"><%= p.description %></p>
-                    <% if(p.link) { %> <a href="<%= p.link %>" target="_blank" class="text-blue-500 font-bold hover:underline text-xs uppercase">View Project →</a> <% } %>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm"><%= p.description %></p>
                 </div>
                 <% }) %>
             </div>
         </section>
 
-        <section id="achievements">
-            <h2 class="text-3xl font-black mb-10 border-l-8 border-green-600 pl-4 uppercase tracking-tight">Achievements & Certifications</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <section id="achievements" class="section">
+            <h2 class="text-3xl font-black mb-10 border-l-8 border-green-600 pl-4 uppercase">Achievements</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-sm">
                 <% achievements.forEach(a => { %>
                 <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl border-l-8 border-green-500 shadow-sm flex items-center justify-between">
-                    <h4 class="font-bold text-lg"><%= a.title %></h4>
-                    <i class="fas fa-award text-green-500 text-2xl"></i>
+                    <span><%= a.title %></span><i class="fas fa-award text-green-500"></i>
                 </div>
                 <% }) %>
             </div>
         </section>
 
-        <section id="gallery">
-            <div class="flex justify-between items-end mb-10 border-l-8 border-orange-500 pl-4">
-                <h2 class="text-3xl font-black uppercase tracking-tight">Photo Gallery</h2>
-                <button onclick="toggleGalleryModal()" class="bg-orange-500 text-white px-6 py-2 rounded-full font-bold text-sm hover:bg-orange-600 transition shadow-lg flex items-center gap-2">
-                    SEE MORE <i class="fas fa-arrow-right"></i>
-                </button>
+        <section id="gallery" class="section">
+            <div class="flex justify-between items-center mb-10 border-l-8 border-orange-500 pl-4">
+                <h2 class="text-3xl font-black uppercase">Gallery</h2>
+                <button onclick="toggleGalleryModal()" class="bg-orange-500 text-white px-6 py-2 rounded-full font-bold">SEE MORE</button>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <% gallery.slice(0, 4).forEach(img => { %>
-                <div class="relative group overflow-hidden rounded-2xl aspect-square cursor-pointer shadow-md" onclick="toggleGalleryModal()">
-                    <img src="<%= img.image_url %>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                <div class="relative group overflow-hidden rounded-2xl aspect-square shadow-md cursor-pointer" onclick="toggleGalleryModal()">
+                    <img src="<%= img.image_url %>" class="w-full h-full object-cover">
                 </div>
                 <% }) %>
             </div>
@@ -108,67 +102,68 @@
     </main>
 
     <div id="all-photos-modal" class="fixed inset-0 bg-white dark:bg-gray-900 z-[100] hidden flex-col overflow-y-auto">
-        <div class="sticky top-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md p-6 border-b dark:border-gray-700 flex justify-between items-center">
-            <h2 class="text-2xl font-black uppercase text-orange-500">Full Gallery</h2>
-            <button onclick="toggleGalleryModal()" class="text-gray-500 hover:text-red-500 text-3xl"><i class="fas fa-times-circle"></i></button>
+        <div class="sticky top-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md p-6 border-b dark:border-gray-700 flex justify-between">
+            <h2 class="text-xl font-black text-orange-500 uppercase">Gallery Viewer</h2>
+            <button onclick="toggleGalleryModal()" class="text-red-500 text-2xl"><i class="fas fa-times-circle"></i></button>
         </div>
         <div class="container mx-auto p-6 grid grid-cols-2 md:grid-cols-4 gap-4">
             <% gallery.forEach(img => { %>
-            <div class="relative group overflow-hidden rounded-xl aspect-square cursor-pointer border dark:border-gray-700" 
-                 onclick="showFullImage('<%= img.image_url %>', '<%= img.caption %>', '<%= img.description %>')">
-                <img src="<%= img.image_url %>" class="w-full h-full object-cover">
+            <div class="cursor-pointer rounded-xl overflow-hidden border dark:border-gray-700" onclick="showFullImage('<%= img.image_url %>', '<%= img.caption %>', '<%= img.description %>')">
+                <img src="<%= img.image_url %>" class="w-full h-full object-cover aspect-square">
             </div>
             <% }) %>
         </div>
     </div>
 
-    <div id="full-image-overlay" class="fixed inset-0 bg-black/95 z-[200] hidden items-center justify-center p-4" onclick="closeFullImage()">
-        <div class="max-w-4xl w-full bg-white dark:bg-gray-800 rounded-3xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+    <div id="full-image-overlay" class="fixed inset-0 bg-black/95 z-[200] hidden items-center justify-center p-4" onclick="this.classList.replace('flex','hidden')">
+        <div class="max-w-4xl w-full bg-white dark:bg-gray-800 rounded-3xl overflow-hidden" onclick="event.stopPropagation()">
             <img id="display-img" src="" class="w-full max-h-[70vh] object-contain bg-black">
             <div class="p-8">
                 <h3 id="display-title" class="text-2xl font-bold text-blue-600 mb-2"></h3>
-                <p id="display-desc" class="text-gray-600 dark:text-gray-400 text-lg"></p>
-                <button onclick="closeFullImage()" class="mt-4 text-red-500 font-bold uppercase text-sm">Close <i class="fas fa-times"></i></button>
+                <p id="display-desc" class="text-gray-600 dark:text-gray-400"></p>
+                <button onclick="document.getElementById('full-image-overlay').classList.replace('flex','hidden')" class="mt-4 text-red-500 font-bold">CLOSE</button>
             </div>
         </div>
     </div>
 
-    <footer class="bg-white dark:bg-gray-800 border-t dark:border-gray-700 py-12 text-center mt-20">
-        <p class="text-gray-500 font-semibold">&copy; 2026 <span class="text-blue-600">Mahmudul Hasan</span>. All Rights Reserved.</p>
+    <footer class="bg-white dark:bg-gray-800 border-t dark:border-gray-700 py-10 text-center">
+        <p>&copy; 2026 Mahmudul Hasan</p>
     </footer>
 
     <script>
-        const menuBtn = document.getElementById('menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        menuBtn.onclick = () => mobileMenu.classList.toggle('hidden');
+        // Active Menu Logic
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-link');
 
-        const themeBtn = document.getElementById('theme-toggle'), themeIcon = document.getElementById('theme-icon'), html = document.documentElement;
-        if(localStorage.theme === 'dark') { html.classList.add('dark'); themeIcon.innerText = '☀️'; }
+        window.addEventListener('scroll', () => {
+            let current = "";
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 100) { current = section.getAttribute('id'); }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) { link.classList.add('active'); }
+            });
+        });
+
+        // Theme & Modal Logic
+        const themeBtn = document.getElementById('theme-toggle'), html = document.documentElement;
+        if(localStorage.theme === 'dark') html.classList.add('dark');
         themeBtn.onclick = () => {
             html.classList.toggle('dark'); const isD = html.classList.contains('dark');
-            localStorage.theme = isD ? 'dark' : 'light'; themeIcon.innerText = isD ? '☀️' : '🌙';
+            localStorage.theme = isD ? 'dark' : 'light';
         }
 
-        function toggleGalleryModal() {
-            const modal = document.getElementById('all-photos-modal');
-            modal.classList.toggle('hidden');
-            modal.classList.toggle('flex');
-            document.body.style.overflow = modal.classList.contains('hidden') ? 'auto' : 'hidden';
-        }
-
-        function showFullImage(url, title, desc) {
-            document.getElementById('display-img').src = url;
-            document.getElementById('display-title').innerText = title;
-            document.getElementById('display-desc').innerText = desc || "Details below...";
+        document.getElementById('menu-btn').onclick = () => document.getElementById('mobile-menu').classList.toggle('hidden');
+        function toggleGalleryModal() { const m = document.getElementById('all-photos-modal'); m.classList.toggle('hidden'); m.classList.toggle('flex'); }
+        function showFullImage(u, t, d) {
+            document.getElementById('display-img').src = u;
+            document.getElementById('display-title').innerText = t;
+            document.getElementById('display-desc').innerText = d || "";
             document.getElementById('full-image-overlay').classList.replace('hidden', 'flex');
         }
-
-        function closeFullImage() { document.getElementById('full-image-overlay').classList.replace('flex', 'hidden'); }
-
-        // মোবাইল লিংকে ক্লিক করলে মেনু অটো বন্ধ হবে
-        document.querySelectorAll('#mobile-menu a').forEach(link => {
-            link.onclick = () => mobileMenu.classList.add('hidden');
-        });
     </script>
 </body>
 </html>
