@@ -7,11 +7,37 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>tailwind.config = { darkMode: 'class' }</script>
-    <style>
+<style>
         html { scroll-behavior: smooth; }
-        /* মডাল অ্যানিমেশন */
+        
+        /* --- Deep Ash Theme (Eye-Care Light Mode for Admin) --- */
+        .light body { 
+            background-color: #cbd5e1; /* গাঢ় গ্রে/অ্যাশ ব্যাকগ্রাউন্ড */
+            color: #0f172a; 
+        }
+        
+        /* Floating Card Style for Admin Panel */
+        .light .admin-card, .light .message-item { 
+            background-color: #f1f5f9; /* ধবধবে সাদার বদলে চোখের জন্য আরামদায়ক হালকা অ্যাশ-সাদা */
+            border: 1px solid #94a3b8; /* বর্ডারটি একটু গাঢ় করা হয়েছে */
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); 
+            transition: all 0.3s ease;
+        }
+        .light .admin-card:hover { 
+            transform: translateY(-4px); 
+            box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.15); 
+        }
+        
+        /* Message Inbox Hover & Open Style */
+        .light .message-item:hover {
+            background-color: #e2e8f0;
+        }
+        .message-body { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .message-item.open .message-body { max-height: 500px; padding-top: 1rem; border-top: 1px solid #94a3b8; margin-top: 1rem; }
+        .dark .message-item.open .message-body { border-top-color: #374151; }
+        
+        /* Message Modal Animation */
         #msg-modal { transition: opacity 0.3s ease; }
-        .msg-card:hover { transform: translateY(-2px); transition: all 0.2s; }
     </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-300">
