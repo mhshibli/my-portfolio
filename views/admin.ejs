@@ -196,7 +196,11 @@
                 <% if (messages && messages.length > 0) { %>
                     <% messages.forEach((m) => { %>
                     <div class="msg-card border dark:border-gray-700 rounded-2xl bg-gray-50 dark:bg-gray-900/30 p-5 flex flex-col justify-between shadow-sm cursor-pointer" 
-                        onclick="openMsgModal('<%= m.name %>', '<%= m.email %>', '<%= m.message.replace(/\n/g, '<br>') %>', '<%= new Date(m.created_at).toLocaleString() %>')">
+                        data-name="<%= m.name %>"
+                        data-email="<%= m.email %>"
+                        data-msg="<%= m.message %>"
+                        data-date="<%= new Date(m.created_at).toLocaleString() %>"
+                        onclick="openMsgModal(this)">
                         <div class="space-y-2">
                             <div class="flex justify-between items-start">
                                 <h4 class="font-bold text-blue-600 dark:text-blue-400 text-sm truncate"><%= m.name %></h4>
@@ -261,16 +265,19 @@
         }
 
         // মেসেজ মডাল ফাংশন
-        function openMsgModal(name, email, text, date) {
+// মেসেজ মডাল ফাংশন (ডাটা অ্যাট্রিবিউট থেকে রিড করবে)
+        function openMsgModal(el) {
             const modal = document.getElementById('msg-modal');
-            document.getElementById('m-name').innerText = name;
-            document.getElementById('m-email').innerText = email;
-            document.getElementById('m-text').innerHTML = text;
-            document.getElementById('m-date').innerText = date;
+            
+            // el.getAttribute ব্যবহার করে ডাটা নেওয়া হচ্ছে
+            document.getElementById('m-name').innerText = el.getAttribute('data-name');
+            document.getElementById('m-email').innerText = el.getAttribute('data-email');
+            document.getElementById('m-text').innerText = el.getAttribute('data-msg');
+            document.getElementById('m-date').innerText = el.getAttribute('data-date');
             
             modal.classList.replace('hidden', 'flex');
             setTimeout(() => { modal.firstElementChild.classList.replace('scale-95', 'scale-100'); }, 10);
-            document.body.style.overflow = 'hidden'; 
+            document.body.style.overflow = 'hidden'; // মডাল ওপেন হলে পেজ স্ক্রল বন্ধ থাকবে
         }
 
         function closeMsgModal() {
