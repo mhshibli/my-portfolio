@@ -55,7 +55,7 @@ app.post('/login', async (req, res) => {
         req.session.isLoggedIn = true;
         return req.session.save(() => res.redirect('/admin'));
     }
-    res.render('login', { error: "ইউজারনেম বা পাসওয়ার্ড ভুল!" });
+    res.render('login', { error: "Wrong Username or Password!" });
 });
 
 // Forgot Password (GET)
@@ -70,7 +70,7 @@ app.post('/forgot-password', async (req, res) => {
         await supabase.from('admin_config').update({ password: new_password }).eq('id', config.id);
         return res.send("<script>alert('Password Reset Successful!'); window.location='/login';</script>");
     }
-    res.render('forgot-password', { error: "ভুল সিক্রেট কোড!" });
+    res.render('forgot-password', { error: "Wrong Secret Code!" });
 });
 
 app.get('/logout', (req, res) => req.session.destroy(() => res.redirect('/login')));
