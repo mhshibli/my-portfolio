@@ -9,40 +9,32 @@
     <script>
         tailwind.config = { darkMode: 'class' }
     </script>
-    <style>
-        .nav-link { transition: all 0.3s; }
-        .dark .nav-link { color: #cbd5e1; }
-    </style>
 </head>
 <body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
 
-    <nav class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md sticky top-0 z-50 border-b dark:border-gray-700">
+    <nav class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md sticky top-0 z-50 border-b dark:border-gray-700">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <a href="#" class="text-xl font-bold text-blue-600 dark:text-blue-400">PORTFOLIO</a>
-
             <div class="flex items-center gap-2">
-                <button id="theme-toggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                <button id="theme-toggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700">
                     <span id="theme-icon">🌙</span>
                 </button>
-                
-                <button id="menu-btn" class="md:hidden p-2 text-gray-600 dark:text-gray-300">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
+                <button id="menu-btn" class="md:hidden p-2"><i class="fas fa-bars"></i></button>
             </div>
-
             <div class="hidden md:flex items-center gap-6 font-medium">
-                <a href="#about" class="nav-link hover:text-blue-600">About</a>
-                <a href="#projects" class="nav-link hover:text-blue-600">Projects</a>
-                <a href="#education" class="nav-link hover:text-blue-600">Education</a>
+                <a href="#about" class="hover:text-blue-600">About</a>
+                <a href="#projects" class="hover:text-blue-600">Projects</a>
+                <a href="#education" class="hover:text-blue-600">Education</a>
+                <a href="#achievements" class="hover:text-blue-600">Achievements</a>
                 <a href="/login" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Admin</a>
             </div>
         </div>
-
-        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 border-t dark:border-gray-700 px-4 py-4 space-y-4 shadow-xl">
-            <a href="#about" class="block font-medium hover:text-blue-600">About Me</a>
-            <a href="#projects" class="block font-medium hover:text-blue-600">My Projects</a>
-            <a href="#education" class="block font-medium hover:text-blue-600">Education</a>
-            <a href="/login" class="block font-medium text-blue-600 border-t pt-2">Admin Login</a>
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 border-t dark:border-gray-700 px-4 py-4 space-y-4">
+            <a href="#about" class="block">About</a>
+            <a href="#projects" class="block">Projects</a>
+            <a href="#education" class="block">Education</a>
+            <a href="#achievements" class="block">Achievements</a>
+            <a href="/login" class="block text-blue-600">Admin Login</a>
         </div>
     </nav>
 
@@ -53,63 +45,59 @@
         </section>
 
         <section id="projects">
-            <h2 class="text-2xl font-bold mb-8 border-l-4 border-blue-600 pl-3">Featured Projects</h2>
+            <h2 class="text-2xl font-bold mb-8 border-l-4 border-blue-600 pl-3">Projects</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <% projects.forEach(p => { %>
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border dark:border-gray-700 hover:shadow-lg transition">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border dark:border-gray-700">
                     <h3 class="text-xl font-bold mb-2 text-blue-600 dark:text-blue-400"><%= p.title %></h3>
                     <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm"><%= p.description %></p>
-                    <% if(p.link) { %>
-                    <a href="<%= p.link %>" target="_blank" class="text-sm font-bold text-blue-500 hover:underline">View Project →</a>
-                    <% } %>
+                    <% if(p.link) { %> <a href="<%= p.link %>" target="_blank" class="text-blue-500 font-bold hover:underline">View →</a> <% } %>
                 </div>
                 <% }) %>
             </div>
         </section>
-        
-        <section id="education">
-            <h2 class="text-2xl font-bold mb-8 border-l-4 border-purple-600 pl-3">Education</h2>
-            <div class="space-y-4">
-                <% education.forEach(e => { %>
-                <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-l-4 border-purple-500">
-                    <h4 class="font-bold text-lg"><%= e.degree %></h4>
-                    <p class="text-gray-500 dark:text-gray-400 text-sm"><%= e.institution %> | <%= e.year %></p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <section id="education">
+                <h2 class="text-2xl font-bold mb-8 border-l-4 border-purple-600 pl-3">Education</h2>
+                <div class="space-y-4">
+                    <% education.forEach(e => { %>
+                    <div class="bg-white dark:bg-gray-800 p-5 rounded-xl border-l-4 border-purple-500 shadow-sm">
+                        <h4 class="font-bold text-lg"><%= e.degree %></h4>
+                        <p class="text-gray-500 text-sm"><%= e.institution %> | <%= e.year %></p>
+                    </div>
+                    <% }) %>
                 </div>
-                <% }) %>
-            </div>
-        </section>
+            </section>
+
+            <section id="achievements">
+                <h2 class="text-2xl font-bold mb-8 border-l-4 border-green-600 pl-3">Certifications & Achievements</h2>
+                <div class="space-y-4">
+                    <% achievements.forEach(a => { %>
+                    <div class="bg-white dark:bg-gray-800 p-5 rounded-xl border-l-4 border-green-500 shadow-sm">
+                        <h4 class="font-bold text-lg"><%= a.title %></h4>
+                        <p class="text-gray-500 text-sm">Issued/Received: <%= a.year %></p>
+                    </div>
+                    <% }) %>
+                </div>
+            </section>
+        </div>
     </div>
 
     <script>
-        // Hamburger Menu Toggle
         const menuBtn = document.getElementById('menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
+        menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
 
-        // Theme Toggle Logic
         const themeToggle = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
         const html = document.documentElement;
-
-        // Check local storage for theme
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            html.classList.add('dark');
-            themeIcon.innerText = '☀️';
-        }
-
         themeToggle.addEventListener('click', () => {
             html.classList.toggle('dark');
             const isDark = html.classList.contains('dark');
-            themeIcon.innerText = isDark ? '☀️' : '🌙';
+            document.getElementById('theme-icon').innerText = isDark ? '☀️' : '🌙';
             localStorage.theme = isDark ? 'dark' : 'light';
         });
-
-        // Close mobile menu when link is clicked
-        document.querySelectorAll('#mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
-        });
+        if (localStorage.theme === 'dark') { html.classList.add('dark'); document.getElementById('theme-icon').innerText = '☀️'; }
     </script>
 </body>
 </html>
