@@ -1,5 +1,6 @@
 // File: index.js
 const express = require('express');
+const os = require('os'); // এটি ফাইলের একদম ওপরে বসাবেন (const express = require('express'); এর নিচে)
 const path = require('path');
 const session = require('express-session');
 const multer = require('multer');
@@ -190,3 +191,23 @@ app.post('/admin/update-profile', isAuthenticated, async (req, res) => {
 app.get('/logout', (req, res) => req.session.destroy(() => res.redirect('/login')));
 
 app.listen(PORT, () => console.log(`Mahmudul Portfolio is running on port ${PORT}`));
+// --- Real-time Hardware Stats API ---
+app.get('/admin/api/server-stats', isAuthenticated, async (req, res) => {
+    // 1. Original CPU Usage Approximation
+    const cores = os.cpus().length;
+    const cpuUsage = ((os.loadavg()[0] / cores) * 100).toFixed(1);
+
+    // 2. Original RAM Usage
+    const totalMem = os.totalmem();
+    const freeMem = os.freemem();
+    const usedRam = ((totalMem - freeMem) / (1024 * 1024 * 1024)).toFixed(2);
+
+    // 3. Original Visitor Count (Total messages in DB used as a dummy metric, or you can use session count)
+    const { count } = await supabase.from('messages').select('*', { count: 'exact', head: true });
+
+    res.json({
+        cpu: cpuUsage,
+        ram: usedRam,
+        visitors: count || 0
+    });
+});
