@@ -12,6 +12,8 @@
         /* Active Menu Style */
         .nav-link.active { color: #f97316 !important; font-weight: 800; border-bottom: 2px solid #f97316; }
         .dark .nav-link.active { color: #fb923c !important; border-bottom-color: #fb923c; }
+        .social-link { transition: all 0.3s ease; }
+        .social-link:hover { transform: translateY(-5px); color: #f97316; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen">
@@ -39,7 +41,7 @@
             <a href="#education" class="nav-link block font-medium">Education</a>
             <a href="#projects" class="nav-link block font-medium">Projects & Work</a>
             <a href="#achievements" class="nav-link block font-medium">Achievements</a>
-            <a href="#gallery" class="nav-link block font-medium">Photo Gallery</a>
+            <a href="#gallery" class="nav-link block font-medium text-orange-500">Photo Gallery</a>
         </div>
     </nav>
 
@@ -81,7 +83,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <% achievements.forEach(a => { %>
                 <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl border-l-8 border-green-500 shadow-sm flex items-center justify-between">
-                    <span class="font-bold text-sm"><%= a.title %></span>
+                    <span class="font-bold text-sm text-gray-700 dark:text-gray-300"><%= a.title %></span>
                     <i class="fas fa-award text-green-500 text-xl"></i>
                 </div>
                 <% }) %>
@@ -129,23 +131,43 @@
         </div>
     </div>
 
-    <footer class="bg-white dark:bg-gray-800 border-t dark:border-gray-700 py-12 text-center">
-        <p class="text-gray-500 font-bold tracking-widest uppercase text-xs">&copy; 2026 Mahmudul Hasan. All Rights Reserved.</p>
+    <footer class="bg-white dark:bg-gray-800 border-t dark:border-gray-700 py-12 text-center mt-auto">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center gap-8 mb-8">
+                <a href="https://facebook.com/your-profile" target="_blank" class="social-link text-3xl text-gray-400 dark:text-gray-500">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a href="https://github.com/mhshibli" target="_blank" class="social-link text-3xl text-gray-400 dark:text-gray-500">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://instagram.com/your-profile" target="_blank" class="social-link text-3xl text-gray-400 dark:text-gray-500">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://linkedin.com/in/your-profile" target="_blank" class="social-link text-3xl text-gray-400 dark:text-gray-500">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+            </div>
+            
+            <p class="text-gray-500 dark:text-gray-400 font-bold tracking-widest uppercase text-xs">
+                &copy; <span id="footer-year"></span> <span class="text-blue-600">Mahmudul Hasan</span>. All Rights Reserved.
+            </p>
+        </div>
     </footer>
 
     <script>
-        // Active Menu Scroll Logic (Fixed for Gallery)
+        // Footer Year
+        document.getElementById('footer-year').innerText = new Date().getFullYear();
+
+        // Active Menu Scroll Logic
         const navLinks = document.querySelectorAll('.nav-link');
         const sections = document.querySelectorAll('section[id]');
 
         function scrollActive() {
             const scrollY = window.pageYOffset;
-
             sections.forEach(current => {
                 const sectionHeight = current.offsetHeight;
                 const sectionTop = current.offsetTop - 150;
                 const sectionId = current.getAttribute('id');
-
                 if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
                     document.querySelector('#desktop-menu a[href*=' + sectionId + ']')?.classList.add('active');
                     document.querySelector('#mobile-menu a[href*=' + sectionId + ']')?.classList.add('active');
@@ -177,7 +199,7 @@
         function showFullImage(u, t, d) {
             document.getElementById('display-img').src = u;
             document.getElementById('display-title').innerText = t;
-            document.getElementById('display-desc').innerText = d || "No detail information provided.";
+            document.getElementById('display-desc').innerText = d || "Detail information not provided.";
             document.getElementById('full-image-overlay').classList.replace('hidden', 'flex');
         }
     </script>
