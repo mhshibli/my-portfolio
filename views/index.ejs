@@ -103,6 +103,31 @@
                 <% }) %>
             </div>
         </section>
+
+        <section id="contact" class="scroll-mt-24 pb-20">
+            <h2 class="text-3xl font-black mb-10 border-l-8 border-blue-600 pl-4 uppercase">Send Me a Message</h2>
+            <div class="max-w-3xl mx-auto bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl border dark:border-gray-700">
+                <form action="/send-message" method="POST" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Your Name</label>
+                            <input type="text" name="name" required class="w-full p-4 rounded-xl border dark:bg-gray-900 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Your Email</label>
+                            <input type="email" name="email" required class="w-full p-4 rounded-xl border dark:bg-gray-900 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Message</label>
+                        <textarea name="message" rows="5" required class="w-full p-4 rounded-xl border dark:bg-gray-900 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Write your message here..."></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white font-black py-4 rounded-xl shadow-lg hover:bg-blue-700 transition uppercase tracking-widest">
+                        Send Message <i class="fas fa-paper-plane ml-2"></i>
+                    </button>
+                </form>
+            </div>
+         </section>
     </main>
 
     <div id="all-photos-modal" class="fixed inset-0 bg-white dark:bg-gray-900 z-[100] hidden flex-col overflow-y-auto">
