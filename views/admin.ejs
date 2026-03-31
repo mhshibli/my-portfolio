@@ -188,23 +188,37 @@
             </div>
         </section>
 
-        <section class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border dark:border-gray-700">
+      <section class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border dark:border-gray-700">
             <h2 class="font-black text-blue-600 mb-6 uppercase tracking-widest border-b pb-2 flex items-center gap-2">
                 <i class="fas fa-envelope-open-text text-orange-500"></i> Inbox
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[600px] overflow-y-auto pr-2">
                 <% if (messages && messages.length > 0) { %>
-                    <% messages.forEach((m) => { %>
+                    <% messages.forEach((m) => { 
+                        
+                        // সার্ভার টাইমকে কনভার্ট করে আপনার লোকাল (বাংলাদেশ) টাইম জেনারেট করা হচ্ছে
+                        let bdTime = new Date(m.created_at).toLocaleString('en-US', { 
+                            timeZone: 'Asia/Dhaka', 
+                            month: 'short', 
+                            day: 'numeric', 
+                            year: 'numeric', 
+                            hour: 'numeric', 
+                            minute: 'numeric', 
+                            hour12: true 
+                        });
+
+                    %>
                     <div class="msg-card border dark:border-gray-700 rounded-2xl bg-gray-50 dark:bg-gray-900/30 p-5 flex flex-col justify-between shadow-sm cursor-pointer" 
                         data-name="<%= m.name %>"
                         data-email="<%= m.email %>"
                         data-msg="<%= m.message %>"
-                        data-date="<%= new Date(m.created_at).toLocaleString() %>"
+                        data-date="<%= bdTime %>"
                         onclick="openMsgModal(this)">
+                        
                         <div class="space-y-2">
-                            <div class="flex justify-between items-start">
+                            <div class="flex justify-between items-start gap-2">
                                 <h4 class="font-bold text-blue-600 dark:text-blue-400 text-sm truncate"><%= m.name %></h4>
-                                <span class="text-[9px] text-gray-400 uppercase font-bold"><%= new Date(m.created_at).toLocaleDateString() %></span>
+                                <span class="text-[10px] text-gray-500 font-bold text-right whitespace-nowrap"><%= bdTime %></span>
                             </div>
                             <p class="text-[11px] text-gray-500 dark:text-gray-400 italic truncate"><%= m.email %></p>
                             <p class="text-xs text-gray-700 dark:text-gray-300 line-clamp-2 mt-2 leading-relaxed"><%= m.message %></p>
