@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(session({
-    secret: 'portfolio_ultra_secure_2026',
+    secret: 'portfolio_super_secure_2026',
     resave: true,
     saveUninitialized: true,
     cookie: { maxAge: 24 * 60 * 60 * 1000 }
@@ -43,12 +43,11 @@ app.get('/', async (req, res) => {
         const { data: ab } = await supabase.from('about').select('content').limit(1).maybeSingle();
 
         res.render('index', { projects: p || [], education: e || [], achievements: a || [], aboutMe: ab ? ab.content : "" });
-    } catch (err) { res.send("Error!"); }
+    } catch (err) { res.send("Error loading site!"); }
 });
 
-// Login & Forgot Password
+// Login
 app.get('/login', (req, res) => res.render('login', { error: null }));
-
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
     const { data: config } = await supabase.from('admin_config').select('*').limit(1).single();
@@ -56,11 +55,13 @@ app.post('/login', async (req, res) => {
         req.session.isLoggedIn = true;
         return req.session.save(() => res.redirect('/admin'));
     }
-    res.render('login', { error: "ভুল ইউজারনেম বা পাসওয়ার্ড!" });
+    res.render('login', { error: "ইউজারনেম বা পাসওয়ার্ড ভুল!" });
 });
 
+// Forgot Password (GET)
 app.get('/forgot-password', (req, res) => res.render('forgot-password', { error: null }));
 
+// Forgot Password (POST) - সিক্রেট কোড দিয়ে পাসওয়ার্ড রিসেট
 app.post('/forgot-password', async (req, res) => {
     const { secret_answer, new_password } = req.body;
     const { data: config } = await supabase.from('admin_config').select('*').limit(1).single();
@@ -82,10 +83,7 @@ app.get('/admin', isAuthenticated, async (req, res) => {
     const { data: ab } = await supabase.from('about').select('content').limit(1).maybeSingle();
     const { data: conf } = await supabase.from('admin_config').select('*').limit(1).single();
 
-    res.render('admin', { 
-        projects: p || [], education: e || [], achievements: a || [], 
-        aboutMe: ab ? ab.content : "", currentAdmin: conf ? conf.username : "Admin" 
-    });
+    res.render('admin', { projects: p || [], education: e || [], achievements: a || [], aboutMe: ab ? ab.content : "", currentAdmin: conf ? conf.username : "Admin" });
 });
 
 app.get('/api/stats', async (req, res) => {
@@ -93,7 +91,7 @@ app.get('/api/stats', async (req, res) => {
     res.json({ cpu: (Math.random()*8+4).toFixed(1), ramUsed: "1.1", ramTotal: "2.0", sysLoad: "0.42", visitors: stats ? stats.visitor_count : 0 });
 });
 
-// Admin Operations
+// Admin Actions
 app.post('/admin/add-project', isAuthenticated, async (req, res) => {
     await supabase.from('projects').insert([req.body]);
     res.redirect('/admin');
