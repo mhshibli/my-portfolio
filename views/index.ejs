@@ -9,9 +9,7 @@
     <script>tailwind.config = { darkMode: 'class' }</script>
     <style>
         html { scroll-behavior: smooth; }
-        /* Active Menu Style */
         .nav-link.active { color: #f97316 !important; font-weight: 800; border-bottom: 2px solid #f97316; }
-        .dark .nav-link.active { color: #fb923c !important; border-bottom-color: #fb923c; }
         .social-link { transition: all 0.3s ease; }
         .social-link:hover { transform: translateY(-5px); color: #f97316; }
     </style>
@@ -20,125 +18,109 @@
 
     <nav class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md sticky top-0 z-50 border-b dark:border-gray-700">
         <div class="container mx-auto px-4 py-4 flex items-center justify-between">
-            <a href="#" class="text-2xl font-bold text-blue-600 dark:text-blue-400 tracking-tighter uppercase">MAHMUDUL HASAN</a>
-            
-            <div id="desktop-menu" class="hidden md:flex items-center gap-6 font-semibold text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400">
-                <a href="#about" class="nav-link hover:text-orange-500 transition px-1">About</a>
-                <a href="#education" class="nav-link hover:text-orange-500 transition px-1">Education</a>
-                <a href="#projects" class="nav-link hover:text-orange-500 transition px-1">Projects</a>
-                <a href="#achievements" class="nav-link hover:text-orange-500 transition px-1">Achievements</a>
-                <a href="#gallery" class="nav-link hover:text-orange-500 transition px-1">Gallery</a>
+            <a href="#" class="text-2xl font-bold text-blue-600 dark:text-blue-400 uppercase">MAHMUDUL</a>
+            <div id="desktop-menu" class="hidden md:flex items-center gap-6 font-semibold text-xs uppercase tracking-widest text-gray-500">
+                <a href="#about" class="nav-link px-1">About</a>
+                <a href="#education" class="nav-link px-1">Education</a>
+                <a href="#projects" class="nav-link px-1">Projects</a>
+                <a href="#achievements" class="nav-link px-1">Achievements</a>
+                <a href="#gallery" class="nav-link px-1">Gallery</a>
             </div>
-
             <div class="flex items-center gap-3">
-                <button id="theme-toggle" class="p-2 rounded-xl bg-gray-100 dark:bg-gray-700"><span id="theme-icon">🌙</span></button>
-                <button id="menu-btn" class="md:hidden p-2 text-gray-600 dark:text-gray-300"><i class="fas fa-bars text-2xl"></i></button>
+                <button id="theme-toggle" class="p-2 rounded-xl bg-gray-100 dark:bg-gray-700">🌙</button>
+                <button id="menu-btn" class="md:hidden p-2"><i class="fas fa-bars text-2xl"></i></button>
             </div>
         </div>
-
-        <div id="mobile-menu" class="hidden flex-col bg-white dark:bg-gray-800 border-t dark:border-gray-700 px-6 py-6 space-y-4 shadow-xl">
-            <a href="#about" class="nav-link block font-medium">About Me</a>
-            <a href="#education" class="nav-link block font-medium">Education</a>
-            <a href="#projects" class="nav-link block font-medium">Projects & Work</a>
-            <a href="#achievements" class="nav-link block font-medium">Achievements</a>
-            <a href="#gallery" class="nav-link block font-medium text-orange-500">Photo Gallery</a>
+        <div id="mobile-menu" class="hidden flex-col bg-white dark:bg-gray-800 p-6 space-y-4 shadow-xl">
+            <a href="#about" class="nav-link">About Me</a>
+            <a href="#education" class="nav-link">Education</a>
+            <a href="#projects" class="nav-link">Projects</a>
+            <a href="#gallery" class="nav-link">Gallery</a>
         </div>
     </nav>
 
     <main class="flex-grow container mx-auto px-4 py-12 space-y-32">
-        <section id="about" class="max-w-4xl mx-auto text-center py-10 scroll-mt-24">
-            <h2 class="text-4xl font-black mb-8 uppercase tracking-tighter border-b-4 border-blue-600 inline-block">About Me</h2>
+        <section id="about" class="max-w-4xl mx-auto text-center py-10 section">
+            <h2 class="text-4xl font-black mb-8 uppercase border-b-4 border-blue-600 inline-block">About Me</h2>
             <div class="p-8 bg-white dark:bg-gray-800 rounded-3xl shadow-sm border dark:border-gray-700 mt-6 italic text-xl">
                 "<%= aboutMe %>"
             </div>
         </section>
 
-        <section id="education" class="scroll-mt-24">
-            <h2 class="text-3xl font-black mb-10 border-l-8 border-purple-600 pl-4 uppercase">Education</h2>
+        <section id="education" class="section">
+            <h2 class="text-3xl font-bold mb-10 border-l-8 border-purple-600 pl-4 uppercase">Education</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <% education.forEach(e => { %>
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl border-l-8 border-purple-500 shadow-sm">
                     <h4 class="font-bold text-2xl mb-2"><%= e.degree %></h4>
-                    <p class="text-gray-600 dark:text-gray-400 font-semibold"><%= e.institution %></p>
-                    <p class="text-gray-400 text-sm mt-2"><i class="far fa-calendar-alt mr-2"></i><%= e.year %></p>
+                    <p><%= e.institution %> • <%= e.year %></p>
                 </div>
                 <% }) %>
             </div>
         </section>
 
-        <section id="projects" class="scroll-mt-24">
-            <h2 class="text-3xl font-black mb-10 border-l-8 border-blue-600 pl-4 uppercase">Projects & Work</h2>
+        <section id="projects" class="section">
+            <h2 class="text-3xl font-bold mb-10 border-l-8 border-blue-600 pl-4 uppercase">Projects & Work</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <% projects.forEach(p => { %>
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border dark:border-gray-700 hover:shadow-xl transition">
-                    <h3 class="text-2xl font-bold mb-3 text-blue-600 dark:text-blue-400 uppercase tracking-tighter"><%= p.title %></h3>
-                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed"><%= p.description %></p>
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border dark:border-gray-700">
+                    <h3 class="text-2xl font-bold mb-3 text-blue-600"><%= p.title %></h3>
+                    <p class="text-sm"><%= p.description %></p>
                 </div>
                 <% }) %>
             </div>
         </section>
 
-        <section id="achievements" class="scroll-mt-24">
-            <h2 class="text-3xl font-black mb-10 border-l-8 border-green-600 pl-4 uppercase">Achievements & Certifications</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <section id="achievements" class="section text-sm">
+            <h2 class="text-3xl font-bold mb-10 border-l-8 border-green-600 pl-4 uppercase">Achievements</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <% achievements.forEach(a => { %>
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl border-l-8 border-green-500 shadow-sm flex items-center justify-between">
-                    <span class="font-bold text-sm text-gray-700 dark:text-gray-300"><%= a.title %></span>
-                    <i class="fas fa-award text-green-500 text-xl"></i>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl border-l-8 border-green-500 shadow-sm flex justify-between items-center font-bold">
+                    <span><%= a.title %></span><i class="fas fa-award text-green-500 text-xl"></i>
                 </div>
                 <% }) %>
             </div>
         </section>
 
-        <section id="gallery" class="scroll-mt-24 pb-20">
+        <section id="gallery" class="section">
             <div class="flex justify-between items-center mb-10 border-l-8 border-orange-500 pl-4">
-                <h2 class="text-3xl font-black uppercase">Photo Gallery</h2>
-                <button onclick="toggleGalleryModal()" class="bg-orange-500 text-white px-6 py-2 rounded-full font-bold shadow-lg hover:bg-orange-600 transition">SEE MORE</button>
+                <h2 class="text-3xl font-bold uppercase">Gallery</h2>
+                <button onclick="toggleGalleryModal()" class="bg-orange-500 text-white px-6 py-2 rounded-full font-bold">SEE MORE</button>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <% gallery.slice(0, 4).forEach(img => { %>
-                <div class="relative group overflow-hidden rounded-2xl aspect-square shadow-md cursor-pointer" onclick="toggleGalleryModal()">
-                    <img src="<%= img.image_url %>" class="w-full h-full object-cover transition-transform group-hover:scale-110">
+                <div class="rounded-2xl overflow-hidden aspect-square shadow-md cursor-pointer" onclick="toggleGalleryModal()">
+                    <img src="<%= img.image_url %>" class="w-full h-full object-cover">
                 </div>
                 <% }) %>
             </div>
         </section>
 
-        <section id="contact" class="scroll-mt-24 pb-20">
-            <h2 class="text-3xl font-black mb-10 border-l-8 border-blue-600 pl-4 uppercase">Send Me a Message</h2>
+        <section id="contact" class="pb-20">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-black uppercase inline-block border-b-4 border-blue-600 pb-2">Send Me a Message</h2>
+            </div>
             <div class="max-w-3xl mx-auto bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl border dark:border-gray-700">
                 <form action="/send-message" method="POST" class="space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Your Name</label>
-                            <input type="text" name="name" required class="w-full p-4 rounded-xl border dark:bg-gray-900 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Your Email</label>
-                            <input type="email" name="email" required class="w-full p-4 rounded-xl border dark:bg-gray-900 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none">
-                        </div>
+                        <input type="text" name="name" placeholder="Your Name" required class="p-4 rounded-xl border dark:bg-gray-900 dark:border-gray-700 outline-none">
+                        <input type="email" name="email" placeholder="Your Email" required class="p-4 rounded-xl border dark:bg-gray-900 dark:border-gray-700 outline-none">
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Message</label>
-                        <textarea name="message" rows="5" required class="w-full p-4 rounded-xl border dark:bg-gray-900 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Write your message here..."></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-blue-600 text-white font-black py-4 rounded-xl shadow-lg hover:bg-blue-700 transition uppercase tracking-widest">
-                        Send Message <i class="fas fa-paper-plane ml-2"></i>
-                    </button>
+                    <textarea name="message" rows="4" placeholder="Your Message" required class="w-full p-4 rounded-xl border dark:bg-gray-900 dark:border-gray-700 outline-none"></textarea>
+                    <button type="submit" class="w-full bg-blue-600 text-white font-black py-4 rounded-xl uppercase tracking-widest">Send Message</button>
                 </form>
             </div>
-         </section>
+        </section>
     </main>
 
     <div id="all-photos-modal" class="fixed inset-0 bg-white dark:bg-gray-900 z-[100] hidden flex-col overflow-y-auto">
-        <div class="sticky top-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md p-6 border-b dark:border-gray-700 flex justify-between items-center">
-            <h2 class="text-xl font-black text-orange-500 uppercase tracking-widest">Full Gallery</h2>
+        <div class="sticky top-0 bg-white/90 dark:bg-gray-900/90 p-6 border-b flex justify-between items-center">
+            <h2 class="text-orange-500 font-black uppercase tracking-widest">Gallery</h2>
             <button onclick="toggleGalleryModal()" class="text-red-500 text-3xl"><i class="fas fa-times-circle"></i></button>
         </div>
-        <div class="container mx-auto p-6 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <div class="container mx-auto p-6 grid grid-cols-2 md:grid-cols-5 gap-4">
             <% gallery.forEach(img => { %>
-            <div class="cursor-pointer rounded-xl overflow-hidden border dark:border-gray-700 aspect-square" 
-                 onclick="showFullImage('<%= img.image_url %>', '<%= img.caption %>', '<%= img.description %>')">
+            <div class="cursor-pointer rounded-xl overflow-hidden aspect-square border dark:border-gray-700" onclick="showFullImage('<%= img.image_url %>', '<%= img.caption %>', '<%= img.description %>')">
                 <img src="<%= img.image_url %>" class="w-full h-full object-cover">
             </div>
             <% }) %>
@@ -146,85 +128,42 @@
     </div>
 
     <div id="full-image-overlay" class="fixed inset-0 bg-black/95 z-[200] hidden items-center justify-center p-4" onclick="this.classList.replace('flex','hidden')">
-        <div class="max-w-4xl w-full bg-white dark:bg-gray-800 rounded-3xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
-            <img id="display-img" src="" class="w-full max-h-[65vh] object-contain bg-black">
+        <div class="max-w-4xl w-full bg-white dark:bg-gray-800 rounded-3xl overflow-hidden" onclick="event.stopPropagation()">
+            <img id="display-img" src="" class="w-full max-h-[60vh] object-contain bg-black">
             <div class="p-8">
-                <h3 id="display-title" class="text-3xl font-bold text-blue-600 mb-3 uppercase tracking-tighter"></h3>
-                <p id="display-desc" class="text-gray-600 dark:text-gray-400 text-lg leading-relaxed"></p>
-                <button onclick="document.getElementById('full-image-overlay').classList.replace('flex','hidden')" class="mt-6 text-red-500 font-black uppercase text-sm">Close Preview <i class="fas fa-times"></i></button>
+                <h3 id="display-title" class="text-2xl font-bold text-blue-600 mb-2"></h3>
+                <p id="display-desc" class="text-gray-600 dark:text-gray-400"></p>
+                <button onclick="document.getElementById('full-image-overlay').classList.replace('flex','hidden')" class="mt-4 text-red-500 font-bold uppercase">Close</button>
             </div>
         </div>
     </div>
 
     <footer class="bg-white dark:bg-gray-800 border-t dark:border-gray-700 py-12 text-center mt-auto">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-center gap-8 mb-8">
-                <a href="https://www.facebook.com/mahmudulhasan.shibli.5" target="_blank" class="social-link text-3xl text-gray-400 dark:text-gray-500">
-                    <i class="fab fa-facebook"></i>
-                </a>
-                <a href="https://github.com/mhshibli" target="_blank" class="social-link text-3xl text-gray-400 dark:text-gray-500">
-                    <i class="fab fa-github"></i>
-                </a>
-                <a href="https://www.instagram.com/shibli__mahmud/" target="_blank" class="social-link text-3xl text-gray-400 dark:text-gray-500">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="https://www.linkedin.com/in/mahmudul-hasan-0730a1211/" target="_blank" class="social-link text-3xl text-gray-400 dark:text-gray-500">
-                    <i class="fab fa-linkedin"></i>
-                </a>
-            </div>
-            
-            <p class="text-gray-500 dark:text-gray-400 font-bold tracking-widest uppercase text-xs">
-                &copy; <span id="footer-year"></span> <span class="text-blue-600">Mahmudul Hasan</span>. All Rights Reserved.
-            </p>
+        <div class="flex justify-center gap-8 mb-8 text-3xl text-gray-400">
+            <a href="#" target="_blank" class="social-link"><i class="fab fa-facebook"></i></a>
+            <a href="https://github.com/mhshibli" target="_blank" class="social-link"><i class="fab fa-github"></i></a>
+            <a href="#" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="#" target="_blank" class="social-link"><i class="fab fa-linkedin"></i></a>
         </div>
+        <p class="font-bold text-xs uppercase tracking-widest text-gray-400">&copy; <span id="year"></span> Mahmudul Hasan</p>
     </footer>
 
     <script>
-        // Footer Year
-        document.getElementById('footer-year').innerText = new Date().getFullYear();
-
-        // Active Menu Scroll Logic
-        const navLinks = document.querySelectorAll('.nav-link');
-        const sections = document.querySelectorAll('section[id]');
-
-        function scrollActive() {
-            const scrollY = window.pageYOffset;
-            sections.forEach(current => {
-                const sectionHeight = current.offsetHeight;
-                const sectionTop = current.offsetTop - 150;
-                const sectionId = current.getAttribute('id');
-                if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-                    document.querySelector('#desktop-menu a[href*=' + sectionId + ']')?.classList.add('active');
-                    document.querySelector('#mobile-menu a[href*=' + sectionId + ']')?.classList.add('active');
-                } else {
-                    document.querySelector('#desktop-menu a[href*=' + sectionId + ']')?.classList.remove('active');
-                    document.querySelector('#mobile-menu a[href*=' + sectionId + ']')?.classList.remove('active');
-                }
-            });
-        }
-        window.addEventListener('scroll', scrollActive);
-
-        // Theme Toggle
-        const themeBtn = document.getElementById('theme-toggle'), themeIcon = document.getElementById('theme-icon'), html = document.documentElement;
-        if(localStorage.theme === 'dark') { html.classList.add('dark'); themeIcon.innerText = '☀️'; }
-        themeBtn.onclick = () => {
-            html.classList.toggle('dark'); const isD = html.classList.contains('dark');
-            localStorage.theme = isD ? 'dark' : 'light'; themeIcon.innerText = isD ? '☀️' : '🌙';
-        }
-
-        // Mobile Menu Toggle
+        document.getElementById('year').innerText = new Date().getFullYear();
+        const navLinks = document.querySelectorAll('.nav-link'), sections = document.querySelectorAll('.section');
+        window.addEventListener('scroll', () => {
+            let current = "";
+            sections.forEach(s => { if (pageYOffset >= s.offsetTop - 150) current = s.getAttribute('id'); });
+            navLinks.forEach(l => { l.classList.remove('active'); if (l.getAttribute('href').includes(current)) l.classList.add('active'); });
+        });
+        const themeBtn = document.getElementById('theme-toggle'), html = document.documentElement;
+        if(localStorage.theme === 'dark') html.classList.add('dark');
+        themeBtn.onclick = () => { html.classList.toggle('dark'); localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light'; }
         document.getElementById('menu-btn').onclick = () => document.getElementById('mobile-menu').classList.toggle('hidden');
-
-        // Modal Functions
-        function toggleGalleryModal() { 
-            const m = document.getElementById('all-photos-modal'); 
-            m.classList.toggle('hidden'); m.classList.toggle('flex'); 
-            document.body.style.overflow = m.classList.contains('hidden') ? 'auto' : 'hidden';
-        }
+        function toggleGalleryModal() { const m = document.getElementById('all-photos-modal'); m.classList.toggle('hidden'); m.classList.toggle('flex'); }
         function showFullImage(u, t, d) {
-            document.getElementById('display-img').src = u;
-            document.getElementById('display-title').innerText = t;
-            document.getElementById('display-desc').innerText = d || "Detail information not provided.";
+            document.getElementById('display-img').src = u; document.getElementById('display-title').innerText = t;
+            document.getElementById('display-desc').innerText = d || "";
             document.getElementById('full-image-overlay').classList.replace('hidden', 'flex');
         }
     </script>
