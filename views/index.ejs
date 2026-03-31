@@ -10,29 +10,41 @@
     <style>
         html { scroll-behavior: smooth; }
         
-        /* --- Light Mode রঙিন থিম --- */
-        .light body { background-color: #f1f5f9; color: #1e293b; }
-        .light .section-card { 
+        /* --- Premium Light Mode Theme --- */
+        .light body { 
+            background-color: #eef2f6; /* চোখের জন্য আরামদায়ক সফট অ্যাশ-ব্লু */
+            color: #334155; 
+        }
+        
+        /* Floating Card Style for Light Mode */
+        .light .section-card, .light .admin-card, .light .msg-card { 
             background-color: #ffffff; 
             border: 1px solid #e2e8f0; 
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); 
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05); /* সফট গ্লো শ্যাডো */
             transition: all 0.3s ease;
         }
-        .light .section-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .light .section-card:hover, .light .admin-card:hover { 
+            transform: translateY(-4px); 
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.08); 
+        }
 
-        /* ডার্ক মেনু বার (লাইটে ও ডার্কে একই থাকবে) */
-        .main-nav { background-color: #1f2937 !important; border-bottom: 1px solid #374151; }
-        .main-nav .logo-text { color: #ffffff !important; }
-        .main-nav .nav-link { color: #9ca3af !important; }
+        /* ডার্ক মেনু বার (লাইট এবং ডার্ক উভয় মোডেই প্রিমিয়াম লাগবে) */
+        .main-nav { background-color: #1e293b !important; border-bottom: 1px solid #334155; }
+        .main-nav .logo-text { color: #f8fafc !important; }
+        .main-nav .nav-link { color: #94a3b8 !important; }
         
-        /* Active Menu Style (Desktop & Mobile) */
+        /* Active Menu Style */
         .nav-link.active { color: #f97316 !important; font-weight: 800; }
         .md-active-border.active { border-bottom: 2px solid #f97316; }
         
+        /* Mobile Menu */
         @media (max-width: 768px) {
             .nav-link.active { background-color: rgba(249, 115, 22, 0.1); border-left: 4px solid #f97316; padding-left: 1rem; }
-            #mobile-menu { background-color: #1f2937 !important; }
+            #mobile-menu { background-color: #1e293b !important; }
         }
+
+        /* Message Modal Animation */
+        #msg-modal { transition: opacity 0.3s ease; }
     </style>
 </head>
 <body class="dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen">
