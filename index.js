@@ -35,28 +35,20 @@ function isAuthenticated(req, res, next) {
 // --- ROUTES ---
 app.get('/', async (req, res) => {
     try {
-        const { data: stats } = await supabase.from('site_stats').select('*').limit(1).single();
-        if (stats) await supabase.from('site_stats').update({ visitor_count: stats.visitor_count + 1 }).eq('id', stats.id);
-
         const { data: p } = await supabase.from('projects').select('*').order('id', { ascending: false });
         const { data: e } = await supabase.from('education').select('*').order('id', { ascending: false });
         const { data: a } = await supabase.from('achievements').select('*').order('id', { ascending: false });
         const { data: g } = await supabase.from('gallery').select('*').order('id', { ascending: false });
         const { data: ab } = await supabase.from('about').select('content').limit(1).maybeSingle();
-
         res.render('index', { projects: p || [], education: e || [], achievements: a || [], gallery: g || [], aboutMe: ab ? ab.content : "" });
-    } catch (err) { res.send("Error!"); }
+    } catch (err) { res.send("Error loading data!"); }
 });
 
-app.get('/login', (req, res) => res.render('login', { error: null }));
-app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-    const { data: config } = await supabase.from('admin_config').select('*').limit(1).single();
-    if (config && username === config.username && password === config.password) {
-        req.session.isLoggedIn = true;
-        return req.session.save(() => res.redirect('/admin'));
-    }
-    res.render('login', { error: "Login failed!" });
+// ম্যাসাজ পাঠানোর রুট
+app.post('/send-message', async (req, res) => {
+    const { name, email, message } = req.body;
+    await supabase.from('messages').insert([{ name, email, message }]);
+    res.send("<script>alert('Message Sent Successfully!'); window.location='/#contact';</script>");
 });
 
 app.get('/admin', isAuthenticated, async (req, res) => {
@@ -64,42 +56,32 @@ app.get('/admin', isAuthenticated, async (req, res) => {
     const { data: e } = await supabase.from('education').select('*').order('id', { ascending: false });
     const { data: a } = await supabase.from('achievements').select('*').order('id', { ascending: false });
     const { data: g } = await supabase.from('gallery').select('*').order('id', { ascending: false });
+    const { data: m } = await supabase.from('messages').select('*').order('id', { ascending: false }); // মেসেজ রিড
     const { data: ab } = await supabase.from('about').select('content').limit(1).maybeSingle();
-    const { data: conf } = await supabase.from('admin_config').select('*').limit(1).single();
-
-    res.render('admin', { projects: p || [], education: e || [], achievements: a || [], gallery: g || [], aboutMe: ab ? ab.content : "", currentAdmin: conf ? conf.username : "Admin" });
+    res.render('admin', { projects: p || [], education: e || [], achievements: a || [], gallery: g || [], messages: m || [], aboutMe: ab ? ab.content : "" });
 });
 
-app.get('/api/stats', async (req, res) => {
-    const { data: stats } = await supabase.from('site_stats').select('visitor_count').limit(1).single();
-    res.json({ cpu: (Math.random()*5+2).toFixed(1), ramUsed: "1.1", ramTotal: "2.0", sysLoad: "0.35", visitors: stats ? stats.visitor_count : 0 });
-});
-
-// Photo Upload to Storage
-app.post('/admin/upload-photo', isAuthenticated, upload.single('imageFile'), async (req, res) => {
-    try {
-        const file = req.file;
-        if (!file) return res.send("No file!");
-        const fileName = `${Date.now()}_${file.originalname}`;
-        await supabase.storage.from('portfolio_gallery').upload(fileName, file.buffer, { contentType: file.mimetype });
-        const { data: urlData } = supabase.storage.from('portfolio_gallery').getPublicUrl(fileName);
-        await supabase.from('gallery').insert([{ image_url: urlData.publicUrl, caption: req.body.caption, description: req.body.description }]);
-        res.redirect('/admin');
-    } catch (err) { res.send(err.message); }
-});
-
-// Photo Detail Update
-app.post('/admin/update-photo/:id', isAuthenticated, async (req, res) => {
-    await supabase.from('gallery').update({ caption: req.body.caption, description: req.body.description }).eq('id', req.params.id);
+// মেসেজ ডিলিট রুট
+app.post('/admin/delete-message/:id', isAuthenticated, async (req, res) => {
+    await supabase.from('messages').delete().eq('id', req.params.id);
     res.redirect('/admin');
 });
 
-// Basic Operations
+// অন্যান্য অ্যাডমিন রুট (অপরিবর্তিত)
+app.post('/admin/upload-photo', isAuthenticated, upload.single('imageFile'), async (req, res) => {
+    const file = req.file;
+    const fileName = `${Date.now()}_${file.originalname}`;
+    await supabase.storage.from('portfolio_gallery').upload(fileName, file.buffer, { contentType: file.mimetype });
+    const { data: urlData } = supabase.storage.from('portfolio_gallery').getPublicUrl(fileName);
+    await supabase.from('gallery').insert([{ image_url: urlData.publicUrl, caption: req.body.caption, description: req.body.description }]);
+    res.redirect('/admin');
+});
+app.post('/admin/update-photo/:id', isAuthenticated, async (req, res) => { await supabase.from('gallery').update({ caption: req.body.caption, description: req.body.description }).eq('id', req.params.id); res.redirect('/admin'); });
 app.post('/admin/delete-photo/:id', isAuthenticated, async (req, res) => { await supabase.from('gallery').delete().eq('id', req.params.id); res.redirect('/admin'); });
-app.post('/admin/add-project', isAuthenticated, async (req, res) => { await supabase.from('projects').insert([req.body]); res.redirect('/admin'); });
-app.post('/admin/delete-project/:id', isAuthenticated, async (req, res) => { await supabase.from('projects').delete().eq('id', req.params.id); res.redirect('/admin'); });
 app.post('/admin/add-education', isAuthenticated, async (req, res) => { await supabase.from('education').insert([req.body]); res.redirect('/admin'); });
 app.post('/admin/delete-education/:id', isAuthenticated, async (req, res) => { await supabase.from('education').delete().eq('id', req.params.id); res.redirect('/admin'); });
+app.post('/admin/add-project', isAuthenticated, async (req, res) => { await supabase.from('projects').insert([req.body]); res.redirect('/admin'); });
+app.post('/admin/delete-project/:id', isAuthenticated, async (req, res) => { await supabase.from('projects').delete().eq('id', req.params.id); res.redirect('/admin'); });
 app.post('/admin/add-achievement', isAuthenticated, async (req, res) => { await supabase.from('achievements').insert([req.body]); res.redirect('/admin'); });
 app.post('/admin/delete-achievement/:id', isAuthenticated, async (req, res) => { await supabase.from('achievements').delete().eq('id', req.params.id); res.redirect('/admin'); });
 app.post('/admin/update-about', isAuthenticated, async (req, res) => {
@@ -113,9 +95,18 @@ app.post('/admin/update-profile', isAuthenticated, async (req, res) => {
     const { data: config } = await supabase.from('admin_config').select('id').limit(1).single();
     if (config) {
         await supabase.from('admin_config').update({ username: new_username, password: new_password, secret_answer: new_secret }).eq('id', config.id);
-        req.session.destroy(() => res.send("<script>alert('Updated!'); window.location='/login';</script>"));
+        req.session.destroy(() => res.redirect('/login'));
     }
 });
-
+app.get('/login', (req, res) => res.render('login', { error: null }));
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+    const { data: config } = await supabase.from('admin_config').select('*').limit(1).single();
+    if (config && username === config.username && password === config.password) {
+        req.session.isLoggedIn = true;
+        return req.session.save(() => res.redirect('/admin'));
+    }
+    res.render('login', { error: "Failed!" });
+});
 app.get('/logout', (req, res) => req.session.destroy(() => res.redirect('/login')));
-app.listen(PORT, () => console.log(`Live on ${PORT}`));
+app.listen(PORT, () => console.log(`Server running at ${PORT}`));
