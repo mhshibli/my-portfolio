@@ -6,79 +6,63 @@
     <title>Mahmudul Hasan | Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = { darkMode: 'class' }
-    </script>
-    <style>
-        html { scroll-behavior: smooth; }
-        .social-icon { transition: all 0.3s ease; }
-        .social-icon:hover { transform: translateY(-5px); }
-        
-        /* ডেস্কটপ মোডে ডার্ক মোড বাটনকে ডানে নেওয়ার জন্য বিশেষ স্টাইল */
-        @media (min-width: 768px) {
-            .desktop-theme-wrapper {
-                order: 10;
-                margin-left: auto;
-            }
-        }
-    </style>
+    <script>tailwind.config = { darkMode: 'class' }</script>
+    <style>html { scroll-behavior: smooth; } .social-icon:hover { transform: translateY(-5px); }</style>
 </head>
 <body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen">
 
     <nav class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md sticky top-0 z-50 border-b dark:border-gray-700">
-        <div class="container mx-auto px-4 py-4 flex items-center justify-between md:justify-start">
-            
-            <a href="#" class="text-2xl font-bold text-blue-600 dark:text-blue-400 tracking-tighter mr-10">MAHMUDUL HASAN</a>
-            
-            <div class="hidden md:flex items-center gap-8 font-semibold text-sm uppercase tracking-wide">
+        <div class="container mx-auto px-4 py-4 flex items-center">
+            <a href="#" class="text-2xl font-bold text-blue-600 dark:text-blue-400 tracking-tighter mr-10 uppercase">Mahmudul</a>
+            <div class="hidden md:flex items-center gap-8 font-semibold text-xs uppercase tracking-widest">
                 <a href="#about" class="hover:text-blue-600 transition">About</a>
                 <a href="#projects" class="hover:text-blue-600 transition">Projects</a>
+                <a href="#gallery" class="hover:text-blue-600 transition">Gallery</a>
                 <a href="#education" class="hover:text-blue-600 transition">Education</a>
-                <a href="#achievements" class="hover:text-blue-600 transition">Achievements</a>
             </div>
-
-            <div class="flex items-center gap-3 desktop-theme-wrapper">
-                <button id="theme-toggle" class="p-2 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition">
-                    <span id="theme-icon" class="text-lg">🌙</span>
-                </button>
-                
-                <button id="menu-btn" class="md:hidden p-2 text-gray-600 dark:text-gray-300 focus:outline-none">
-                    <i class="fas fa-bars text-2xl"></i>
-                </button>
+            <div class="ml-auto flex items-center gap-3">
+                <button id="theme-toggle" class="p-2 rounded-xl bg-gray-100 dark:bg-gray-700"><span id="theme-icon">🌙</span></button>
+                <button id="menu-btn" class="md:hidden p-2"><i class="fas fa-bars text-xl"></i></button>
             </div>
         </div>
-
-        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 border-t dark:border-gray-700 px-6 py-8 space-y-5 shadow-2xl absolute w-full left-0">
-            <a href="#about" class="block text-lg font-medium">About Me</a>
-            <a href="#projects" class="block text-lg font-medium">My Projects</a>
-            <a href="#education" class="block text-lg font-medium">Education</a>
-            <a href="#achievements" class="block text-lg font-medium">Achievements</a>
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 p-6 space-y-4 shadow-xl">
+            <a href="#about" class="block">About</a>
+            <a href="#projects" class="block">Projects</a>
+            <a href="#gallery" class="block">Gallery</a>
+            <a href="#education" class="block">Education</a>
         </div>
     </nav>
 
     <main class="flex-grow container mx-auto px-4 py-12 space-y-24">
-        
-        <section id="about" class="max-w-4xl mx-auto text-center py-12">
-            <h2 class="text-4xl font-extrabold mb-8 text-gray-800 dark:text-white">Who I Am</h2>
+        <section id="about" class="max-w-4xl mx-auto text-center py-10">
+            <h2 class="text-4xl font-black mb-8 text-gray-800 dark:text-white uppercase tracking-tighter">About Me</h2>
             <div class="p-8 bg-white dark:bg-gray-800 rounded-3xl shadow-sm border dark:border-gray-700">
-                <p class="text-xl text-gray-600 dark:text-gray-400 leading-relaxed italic">
-                    "<%= aboutMe %>"
-                </p>
+                <p class="text-xl text-gray-600 dark:text-gray-400 leading-relaxed italic">"<%= aboutMe %>"</p>
+            </div>
+        </section>
+
+        <section id="gallery">
+            <h2 class="text-3xl font-bold mb-10 border-l-8 border-orange-500 pl-4">Photo Gallery</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <% gallery.forEach(img => { %>
+                <div class="group relative overflow-hidden rounded-2xl aspect-square bg-gray-200 shadow-md">
+                    <img src="<%= img.image_url %>" alt="<%= img.caption %>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4">
+                        <p class="text-white text-center text-sm font-medium"><%= img.caption %></p>
+                    </div>
+                </div>
+                <% }) %>
             </div>
         </section>
 
         <section id="projects">
-            <h2 class="text-3xl font-bold mb-10 border-l-8 border-blue-600 pl-4">My Projects</h2>
+            <h2 class="text-3xl font-bold mb-10 border-l-8 border-blue-600 pl-4">Projects</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <% projects.forEach(p => { %>
-                <div class="group bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
-                    <h3 class="text-2xl font-bold mb-3 text-blue-600 dark:text-blue-400 group-hover:text-blue-500"><%= p.title %></h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-6 text-base leading-relaxed"><%= p.description %></p>
-                    <% if(p.link) { %>
-                        <a href="<%= p.link %>" target="_blank" class="inline-flex items-center gap-2 text-sm font-bold text-blue-500 hover:text-blue-700">
-                            EXPLORE PROJECT <i class="fas fa-arrow-right text-xs"></i>
-                        </a>
-                    <% } %>
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border dark:border-gray-700">
+                    <h3 class="text-2xl font-bold mb-3 text-blue-600 dark:text-blue-400"><%= p.title %></h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6 text-sm"><%= p.description %></p>
+                    <% if(p.link) { %> <a href="<%= p.link %>" target="_blank" class="text-blue-500 font-bold hover:underline">Explore <i class="fas fa-arrow-right ml-1"></i></a> <% } %>
                 </div>
                 <% }) %>
             </div>
@@ -87,99 +71,31 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
             <section id="education">
                 <h2 class="text-3xl font-bold mb-10 border-l-8 border-purple-600 pl-4">Education</h2>
-                <div class="space-y-6">
-                    <% education.forEach(e => { %>
-                    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl border-l-8 border-purple-500 shadow-sm hover:translate-x-2 transition-transform">
-                        <h4 class="font-bold text-xl"><%= e.degree %></h4>
-                        <p class="text-gray-500 dark:text-gray-400 font-medium"><%= e.institution %> • <%= e.year %></p>
-                    </div>
-                    <% }) %>
-                </div>
+                <div class="space-y-6"><% education.forEach(e => { %><div class="bg-white dark:bg-gray-800 p-6 rounded-2xl border-l-8 border-purple-500 shadow-sm"><h4 class="font-bold text-xl"><%= e.degree %></h4><p class="text-gray-500"><%= e.institution %> • <%= e.year %></p></div><% }) %></div>
             </section>
-
             <section id="achievements">
                 <h2 class="text-3xl font-bold mb-10 border-l-8 border-green-600 pl-4">Achievements</h2>
-                <div class="space-y-6">
-                    <% achievements.forEach(a => { %>
-                    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl border-l-8 border-green-500 shadow-sm hover:translate-x-2 transition-transform">
-                        <h4 class="font-bold text-xl"><%= a.title %></h4>
-                        <p class="text-gray-500 dark:text-gray-400 font-medium">Received in: <%= a.year %></p>
-                    </div>
-                    <% }) %>
-                </div>
+                <div class="space-y-6"><% achievements.forEach(a => { %><div class="bg-white dark:bg-gray-800 p-6 rounded-2xl border-l-8 border-green-500 shadow-sm"><h4 class="font-bold text-xl"><%= a.title %></h4><p class="text-gray-500">Year: <%= a.year %></p></div><% }) %></div>
             </section>
         </div>
     </main>
 
-    <footer class="bg-white dark:bg-gray-800 border-t dark:border-gray-700 py-12">
-        <div class="container mx-auto px-4 text-center">
-            
-            <div class="flex justify-center gap-8 mb-8">
-                <a href="https://github.com/mhshibli" target="_blank" class="social-icon text-3xl text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white">
-                    <i class="fab fa-github"></i>
-                </a>
-                <a href="https://www.facebook.com/mahmudulhasan.shibli.5" target="_blank" class="social-icon text-3xl text-gray-600 dark:text-gray-400 hover:text-blue-600">
-                    <i class="fab fa-facebook"></i>
-                </a>
-                <a href="https://www.instagram.com/shibli__mahmud/" target="_blank" class="social-icon text-3xl text-gray-600 dark:text-gray-400 hover:text-pink-500">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="https://www.linkedin.com/in/mahmudul-hasan-0730a1211/" target="_blank" class="social-icon text-3xl text-gray-600 dark:text-gray-400 hover:text-blue-700">
-                    <i class="fab fa-linkedin"></i>
-                </a>
-            </div>
-
-            <div class="space-y-2">
-                <p class="text-gray-500 dark:text-gray-400 font-semibold">
-                    &copy; <span id="footer-year"></span> <span class="text-blue-600">Mahmudul Hasan</span>. All Rights Reserved.
-                </p>
-             
-            </div>
+    <footer class="bg-white dark:bg-gray-800 border-t dark:border-gray-700 py-12 text-center">
+        <div class="flex justify-center gap-8 mb-8 text-3xl text-gray-400">
+            <a href="https://github.com/mhshibli" target="_blank" class="social-icon hover:text-black dark:hover:text-white"><i class="fab fa-github"></i></a>
+            <a href="#" target="_blank" class="social-icon hover:text-blue-600"><i class="fab fa-facebook"></i></a>
+            <a href="#" target="_blank" class="social-icon hover:text-pink-500"><i class="fab fa-instagram"></i></a>
+            <a href="#" target="_blank" class="social-icon hover:text-blue-700"><i class="fab fa-linkedin"></i></a>
         </div>
+        <p class="text-gray-500 font-semibold">&copy; <span id="year"></span> <span class="text-blue-600">Mahmudul Hasan</span>. All Rights Reserved.</p>
     </footer>
 
     <script>
-        // 1. Footer Year
-        const yearEl = document.getElementById('footer-year');
-        if(yearEl) yearEl.innerText = new Date().getFullYear();
-
-        // 2. Mobile Menu Toggle
-        const menuBtn = document.getElementById('menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        if(menuBtn && mobileMenu) {
-            menuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-        }
-
-        // 3. Dark Mode Toggle
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
-        const html = document.documentElement;
-
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            html.classList.add('dark');
-            if(themeIcon) themeIcon.innerText = '☀️';
-        } else {
-            html.classList.remove('dark');
-            if(themeIcon) themeIcon.innerText = '🌙';
-        }
-
-        if(themeToggle) {
-            themeToggle.addEventListener('click', () => {
-                html.classList.toggle('dark');
-                const isDark = html.classList.contains('dark');
-                if(themeIcon) themeIcon.innerText = isDark ? '☀️' : '🌙';
-                localStorage.theme = isDark ? 'dark' : 'light';
-            });
-        }
-
-        // 4. Close Mobile Menu on Click
-        document.querySelectorAll('#mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                if(mobileMenu) mobileMenu.classList.add('hidden');
-            });
-        });
+        document.getElementById('year').innerText = new Date().getFullYear();
+        document.getElementById('menu-btn').onclick = () => document.getElementById('mobile-menu').classList.toggle('hidden');
+        const themeBtn = document.getElementById('theme-toggle'), html = document.documentElement;
+        if(localStorage.theme === 'dark') { html.classList.add('dark'); document.getElementById('theme-icon').innerText = '☀️'; }
+        themeBtn.onclick = () => { html.classList.toggle('dark'); const isD = html.classList.contains('dark'); localStorage.theme = isD ? 'dark' : 'light'; document.getElementById('theme-icon').innerText = isD ? '☀️' : '🌙'; }
     </script>
 </body>
 </html>
