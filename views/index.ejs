@@ -246,14 +246,51 @@
         document.querySelectorAll('#mobile-menu a').forEach(link => {
             link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
         });
-    </script>
-</body>
-</html>
-            const isDark = html.classList.contains('dark');
-            document.getElementById('theme-icon').innerText = isDark ? '☀️' : '🌙';
-            localStorage.theme = isDark ? 'dark' : 'light';
+<script>
+        // বর্তমান বছর সেট করা
+        const yearSpan = document.getElementById('year');
+        if(yearSpan) {
+            yearSpan.innerText = new Date().getFullYear();
+        }
+
+        // মোবাইল মেনু টগল লজিক
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if(menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // ডার্ক মোড লজিক
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const html = document.documentElement;
+
+        // আগের সেভ করা থিম চেক করা
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+            if(themeIcon) themeIcon.innerText = '☀️';
+        } else {
+            html.classList.remove('dark');
+            if(themeIcon) themeIcon.innerText = '🌙';
+        }
+
+        if(themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                html.classList.toggle('dark');
+                const isDark = html.classList.contains('dark');
+                if(themeIcon) themeIcon.innerText = isDark ? '☀️' : '🌙';
+                localStorage.theme = isDark ? 'dark' : 'light';
+            });
+        }
+
+        // মোবাইল মেনুর লিংকে ক্লিক করলে মেনু বন্ধ হওয়া
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                if(mobileMenu) mobileMenu.classList.add('hidden');
+            });
         });
-        if (localStorage.theme === 'dark') { html.classList.add('dark'); document.getElementById('theme-icon').innerText = '☀️'; }
     </script>
 </body>
 </html>
