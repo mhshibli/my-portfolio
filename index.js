@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(session({
-    secret: 'portfolio_mahmudul_2026',
+    secret: 'mahmudul_portfolio_2026_secure',
     resave: true,
     saveUninitialized: true,
     cookie: { maxAge: 24 * 60 * 60 * 1000 }
@@ -30,7 +30,6 @@ function isAuthenticated(req, res, next) {
 }
 
 // --- ROUTES ---
-
 app.get('/', async (req, res) => {
     try {
         const { data: stats } = await supabase.from('site_stats').select('*').limit(1).single();
@@ -44,9 +43,9 @@ app.get('/', async (req, res) => {
 
         res.render('index', { 
             projects: p || [], education: e || [], achievements: a || [], 
-            gallery: g || [], aboutMe: ab ? ab.content : "" 
+            gallery: g || [], aboutMe: ab ? ab.content : "Welcome!" 
         });
-    } catch (err) { res.send("Error loading site!"); }
+    } catch (err) { res.send("Error loading database. Please check Supabase tables."); }
 });
 
 app.get('/login', (req, res) => res.render('login', { error: null }));
@@ -57,7 +56,7 @@ app.post('/login', async (req, res) => {
         req.session.isLoggedIn = true;
         return req.session.save(() => res.redirect('/admin'));
     }
-    res.render('login', { error: "ভুল তথ্য!" });
+    res.render('login', { error: "Invalid Credentials!" });
 });
 
 app.get('/forgot-password', (req, res) => res.render('forgot-password', { error: null }));
@@ -66,9 +65,9 @@ app.post('/forgot-password', async (req, res) => {
     const { data: config } = await supabase.from('admin_config').select('*').limit(1).single();
     if (config && secret_answer === config.secret_answer) {
         await supabase.from('admin_config').update({ password: new_password }).eq('id', config.id);
-        return res.send("<script>alert('Reset Successful!'); window.location='/login';</script>");
+        return res.send("<script>alert('Password Reset Success!'); window.location='/login';</script>");
     }
-    res.render('forgot-password', { error: "ভুল সিক্রেট কোড!" });
+    res.render('forgot-password', { error: "Wrong Secret Code!" });
 });
 
 app.get('/admin', isAuthenticated, async (req, res) => {
@@ -87,10 +86,9 @@ app.get('/admin', isAuthenticated, async (req, res) => {
 
 app.get('/api/stats', async (req, res) => {
     const { data: stats } = await supabase.from('site_stats').select('visitor_count').limit(1).single();
-    res.json({ cpu: (Math.random()*8+4).toFixed(1), ramUsed: "1.1", ramTotal: "2.0", sysLoad: "0.42", visitors: stats ? stats.visitor_count : 0 });
+    res.json({ cpu: (Math.random()*7+3).toFixed(1), ramUsed: "1.2", ramTotal: "2.0", sysLoad: "0.40", visitors: stats ? stats.visitor_count : 0 });
 });
 
-// Admin Operations
 app.post('/admin/add-project', isAuthenticated, async (req, res) => { await supabase.from('projects').insert([req.body]); res.redirect('/admin'); });
 app.post('/admin/add-education', isAuthenticated, async (req, res) => { await supabase.from('education').insert([req.body]); res.redirect('/admin'); });
 app.post('/admin/add-achievement', isAuthenticated, async (req, res) => { await supabase.from('achievements').insert([req.body]); res.redirect('/admin'); });
@@ -108,7 +106,7 @@ app.post('/admin/update-profile', isAuthenticated, async (req, res) => {
     const { data: config } = await supabase.from('admin_config').select('id').limit(1).single();
     if (config) {
         await supabase.from('admin_config').update({ username: new_username, password: new_password, secret_answer: new_secret }).eq('id', config.id);
-        req.session.destroy(() => res.send("<script>alert('Updated!'); window.location='/login';</script>"));
+        req.session.destroy(() => res.send("<script>alert('Profile Updated! Login again.'); window.location='/login';</script>"));
     }
 });
 
@@ -118,4 +116,4 @@ app.post('/admin/delete-achievement/:id', isAuthenticated, async (req, res) => {
 app.post('/admin/delete-photo/:id', isAuthenticated, async (req, res) => { await supabase.from('gallery').delete().eq('id', req.params.id); res.redirect('/admin'); });
 
 app.get('/logout', (req, res) => req.session.destroy(() => res.redirect('/login')));
-app.listen(PORT, () => console.log(`Server at ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
