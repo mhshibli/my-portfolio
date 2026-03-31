@@ -12,8 +12,9 @@
         /* Active Menu Style */
         .nav-link.active { color: #f97316 !important; font-weight: 800; border-bottom: 2px solid #f97316; }
         .dark .nav-link.active { color: #fb923c !important; border-bottom-color: #fb923c; }
-        .social-link { transition: all 0.3s ease; }
-        .social-link:hover { transform: translateY(-5px); color: #f97316; }
+        @media (max-width: 768px) {
+            .nav-link.active { border-bottom: none; padding-left: 10px; border-left: 4px solid #f97316; }
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen">
@@ -37,36 +38,33 @@
         </div>
 
         <div id="mobile-menu" class="hidden flex-col bg-white dark:bg-gray-800 border-t dark:border-gray-700 px-6 py-6 space-y-4 shadow-xl">
-            <a href="#about" class="nav-link block font-medium">About Me</a>
+            <a href="#about" class="nav-link block font-medium">About</a>
             <a href="#education" class="nav-link block font-medium">Education</a>
-            <a href="#projects" class="nav-link block font-medium">Projects & Work</a>
+            <a href="#projects" class="nav-link block font-medium">Projects</a>
             <a href="#achievements" class="nav-link block font-medium">Achievements</a>
-            <a href="#gallery" class="nav-link block font-medium text-orange-500">Photo Gallery</a>
+            <a href="#gallery" class="nav-link block font-medium">Gallery</a>
         </div>
     </nav>
 
     <main class="flex-grow container mx-auto px-4 py-12 space-y-32">
-        <section id="about" class="max-w-4xl mx-auto text-center py-10 scroll-mt-24">
+        <section id="about" class="section max-w-4xl mx-auto text-center py-10 scroll-mt-24">
             <h2 class="text-4xl font-black mb-8 uppercase tracking-tighter border-b-4 border-blue-600 inline-block">About Me</h2>
-            <div class="p-8 bg-white dark:bg-gray-800 rounded-3xl shadow-sm border dark:border-gray-700 mt-6 italic text-xl">
-                "<%= aboutMe %>"
-            </div>
+            <div class="p-8 bg-white dark:bg-gray-800 rounded-3xl shadow-sm border dark:border-gray-700 mt-6 italic text-xl">"<%= aboutMe %>"</div>
         </section>
 
-        <section id="education" class="scroll-mt-24">
+        <section id="education" class="section scroll-mt-24">
             <h2 class="text-3xl font-black mb-10 border-l-8 border-purple-600 pl-4 uppercase">Education</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <% education.forEach(e => { %>
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl border-l-8 border-purple-500 shadow-sm">
                     <h4 class="font-bold text-2xl mb-2"><%= e.degree %></h4>
-                    <p class="text-gray-600 dark:text-gray-400 font-semibold"><%= e.institution %></p>
-                    <p class="text-gray-400 text-sm mt-2"><i class="far fa-calendar-alt mr-2"></i><%= e.year %></p>
+                    <p class="text-gray-600 dark:text-gray-400 font-semibold"><%= e.institution %> • <%= e.year %></p>
                 </div>
                 <% }) %>
             </div>
         </section>
 
-        <section id="projects" class="scroll-mt-24">
+        <section id="projects" class="section scroll-mt-24">
             <h2 class="text-3xl font-black mb-10 border-l-8 border-blue-600 pl-4 uppercase">Projects & Work</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <% projects.forEach(p => { %>
@@ -78,7 +76,7 @@
             </div>
         </section>
 
-        <section id="achievements" class="scroll-mt-24">
+        <section id="achievements" class="section scroll-mt-24">
             <h2 class="text-3xl font-black mb-10 border-l-8 border-green-600 pl-4 uppercase">Achievements & Certifications</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <% achievements.forEach(a => { %>
@@ -90,7 +88,7 @@
             </div>
         </section>
 
-        <section id="gallery" class="scroll-mt-24 pb-20">
+        <section id="gallery" class="section scroll-mt-24 pb-20">
             <div class="flex justify-between items-center mb-10 border-l-8 border-orange-500 pl-4">
                 <h2 class="text-3xl font-black uppercase">Photo Gallery</h2>
                 <button onclick="toggleGalleryModal()" class="bg-orange-500 text-white px-6 py-2 rounded-full font-bold shadow-lg hover:bg-orange-600 transition">SEE MORE</button>
@@ -106,30 +104,16 @@
 
         <section id="contact" class="scroll-mt-24 pb-20 section">
             <div class="text-center mb-10">
-                <h2 class="text-3xl font-black uppercase inline-block border-b-4 border-blue-600 pb-2">
-                    Send Me a Message
-                </h2>
+                <h2 class="text-3xl font-black uppercase inline-block border-b-4 border-blue-600 pb-2">Send Me a Message</h2>
             </div>
-        
             <div class="max-w-3xl mx-auto bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl border dark:border-gray-700">
                 <form action="/send-message" method="POST" class="space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Your Name</label>
-                            <input type="text" name="name" required class="w-full p-4 rounded-xl border dark:bg-gray-900 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Your Email</label>
-                            <input type="email" name="email" required class="w-full p-4 rounded-xl border dark:bg-gray-900 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition">
-                        </div>
+                        <input type="text" name="name" placeholder="Name" required class="w-full p-4 rounded-xl border dark:bg-gray-900 dark:border-gray-700 outline-none">
+                        <input type="email" name="email" placeholder="Email" required class="w-full p-4 rounded-xl border dark:bg-gray-900 dark:border-gray-700 outline-none">
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Message</label>
-                        <textarea name="message" rows="5" required class="w-full p-4 rounded-xl border dark:bg-gray-900 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Write your message here..."></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-blue-600 text-white font-black py-4 rounded-xl shadow-lg hover:bg-blue-700 transition uppercase tracking-widest">
-                        Send Message <i class="fas fa-paper-plane ml-2"></i>
-                    </button>
+                    <textarea name="message" rows="5" placeholder="Message" required class="w-full p-4 rounded-xl border dark:bg-gray-900 dark:border-gray-700 outline-none"></textarea>
+                    <button type="submit" class="w-full bg-blue-600 text-white font-black py-4 rounded-xl uppercase tracking-widest">Send Message</button>
                 </form>
             </div>
         </section>
@@ -137,13 +121,12 @@
 
     <div id="all-photos-modal" class="fixed inset-0 bg-white dark:bg-gray-900 z-[100] hidden flex-col overflow-y-auto">
         <div class="sticky top-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md p-6 border-b dark:border-gray-700 flex justify-between items-center">
-            <h2 class="text-xl font-black text-orange-500 uppercase tracking-widest">Full Gallery</h2>
+            <h2 class="text-xl font-black text-orange-500 uppercase">Gallery</h2>
             <button onclick="toggleGalleryModal()" class="text-red-500 text-3xl"><i class="fas fa-times-circle"></i></button>
         </div>
-        <div class="container mx-auto p-6 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <div class="container mx-auto p-6 grid grid-cols-2 md:grid-cols-4 gap-4">
             <% gallery.forEach(img => { %>
-            <div class="cursor-pointer rounded-xl overflow-hidden border dark:border-gray-700 aspect-square" 
-                 onclick="showFullImage('<%= img.image_url %>', '<%= img.caption %>', '<%= img.description %>')">
+            <div class="cursor-pointer rounded-xl overflow-hidden border dark:border-gray-700 aspect-square" onclick="showFullImage('<%= img.image_url %>', '<%= img.caption %>', '<%= img.description %>')">
                 <img src="<%= img.image_url %>" class="w-full h-full object-cover">
             </div>
             <% }) %>
@@ -153,61 +136,48 @@
     <div id="full-image-overlay" class="fixed inset-0 bg-black/95 z-[200] hidden items-center justify-center p-4" onclick="this.classList.replace('flex','hidden')">
         <div class="max-w-4xl w-full bg-white dark:bg-gray-800 rounded-3xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
             <img id="display-img" src="" class="w-full max-h-[65vh] object-contain bg-black">
-            <div class="p-8">
-                <h3 id="display-title" class="text-3xl font-bold text-blue-600 mb-3 uppercase tracking-tighter"></h3>
-                <p id="display-desc" class="text-gray-600 dark:text-gray-400 text-lg leading-relaxed"></p>
-                <button onclick="document.getElementById('full-image-overlay').classList.replace('flex','hidden')" class="mt-6 text-red-500 font-black uppercase text-sm">Close Preview <i class="fas fa-times"></i></button>
-            </div>
+            <div class="p-8"><h3 id="display-title" class="text-2xl font-bold text-blue-600 mb-2"></h3><p id="display-desc" class="text-gray-600 dark:text-gray-400 text-sm"></p></div>
         </div>
     </div>
 
     <footer class="bg-white dark:bg-gray-800 border-t dark:border-gray-700 py-12 text-center mt-auto">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-center gap-8 mb-8">
-                <a href="https://www.facebook.com/mahmudulhasan.shibli.5" target="_blank" class="social-link text-3xl text-gray-400 dark:text-gray-500">
-                    <i class="fab fa-facebook"></i>
-                </a>
-                <a href="https://github.com/mhshibli" target="_blank" class="social-link text-3xl text-gray-400 dark:text-gray-500">
-                    <i class="fab fa-github"></i>
-                </a>
-                <a href="https://www.instagram.com/shibli__mahmud/" target="_blank" class="social-link text-3xl text-gray-400 dark:text-gray-500">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="https://www.linkedin.com/in/mahmudul-hasan-0730a1211/" target="_blank" class="social-link text-3xl text-gray-400 dark:text-gray-500">
-                    <i class="fab fa-linkedin"></i>
-                </a>
-            </div>
-            
-            <p class="text-gray-500 dark:text-gray-400 font-bold tracking-widest uppercase text-xs">
-                &copy; <span id="footer-year"></span> <span class="text-blue-600">Mahmudul Hasan</span>. All Rights Reserved.
-            </p>
+        <div class="flex justify-center gap-8 mb-8 text-2xl text-gray-400">
+            <a href="https://www.facebook.com/mahmudulhasan.shibli.5"><i class="fab fa-facebook"></i></a>
+            <a href="https://github.com/mhshibli"><i class="fab fa-github"></i></a>
+            <a href="https://www.instagram.com/shibli__mahmud/"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/in/mahmudul-hasan-0730a1211/"><i class="fab fa-linkedin"></i></a>
         </div>
+        <p class="text-xs font-bold uppercase tracking-widest text-gray-500">&copy; 2026 Mahmudul Hasan</p>
     </footer>
 
     <script>
-        // Footer Year
-        document.getElementById('footer-year').innerText = new Date().getFullYear();
-
-        // Active Menu Scroll Logic
         const navLinks = document.querySelectorAll('.nav-link');
-        const sections = document.querySelectorAll('section[id]');
+        const sections = document.querySelectorAll('.section');
 
         function scrollActive() {
             const scrollY = window.pageYOffset;
+
             sections.forEach(current => {
                 const sectionHeight = current.offsetHeight;
-                const sectionTop = current.offsetTop - 150;
+                const sectionTop = current.offsetTop - 160; // পজিশন অ্যাডজাস্টমেন্ট
                 const sectionId = current.getAttribute('id');
+
+                // ডেস্কটপ ও মোবাইল উভয় মেনুর লিংক সিলেক্ট করা
+                const activeLinks = document.querySelectorAll('a[href*=' + sectionId + '].nav-link');
+
                 if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-                    document.querySelector('#desktop-menu a[href*=' + sectionId + ']')?.classList.add('active');
-                    document.querySelector('#mobile-menu a[href*=' + sectionId + ']')?.classList.add('active');
+                    activeLinks.forEach(link => link.classList.add('active'));
                 } else {
-                    document.querySelector('#desktop-menu a[href*=' + sectionId + ']')?.classList.remove('active');
-                    document.querySelector('#mobile-menu a[href*=' + sectionId + ']')?.classList.remove('active');
+                    activeLinks.forEach(link => link.classList.remove('active'));
                 }
             });
         }
         window.addEventListener('scroll', scrollActive);
+
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuBtn.onclick = () => mobileMenu.classList.toggle('hidden');
 
         // Theme Toggle
         const themeBtn = document.getElementById('theme-toggle'), themeIcon = document.getElementById('theme-icon'), html = document.documentElement;
@@ -217,21 +187,18 @@
             localStorage.theme = isD ? 'dark' : 'light'; themeIcon.innerText = isD ? '☀️' : '🌙';
         }
 
-        // Mobile Menu Toggle
-        document.getElementById('menu-btn').onclick = () => document.getElementById('mobile-menu').classList.toggle('hidden');
-
-        // Modal Functions
-        function toggleGalleryModal() { 
-            const m = document.getElementById('all-photos-modal'); 
-            m.classList.toggle('hidden'); m.classList.toggle('flex'); 
-            document.body.style.overflow = m.classList.contains('hidden') ? 'auto' : 'hidden';
-        }
+        function toggleGalleryModal() { const m = document.getElementById('all-photos-modal'); m.classList.toggle('hidden'); m.classList.toggle('flex'); }
         function showFullImage(u, t, d) {
             document.getElementById('display-img').src = u;
             document.getElementById('display-title').innerText = t;
-            document.getElementById('display-desc').innerText = d || "Detail information not provided.";
+            document.getElementById('display-desc').innerText = d || "";
             document.getElementById('full-image-overlay').classList.replace('hidden', 'flex');
         }
+
+        // মোবাইল মেনুর লিংকে ক্লিক করলে মেনু অটো বন্ধ হবে
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.onclick = () => mobileMenu.classList.add('hidden');
+        });
     </script>
 </body>
 </html>
