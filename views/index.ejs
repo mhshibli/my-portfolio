@@ -172,37 +172,51 @@
     </div>
 
     <script>
-        // Scroll Active Logic (Fixed for Mobile & Desktop Orange Color)
+        // ১. Scroll Active Logic (100% Fixed for All Sections)
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+
         window.addEventListener('scroll', () => {
-            const sections = document.querySelectorAll('.section');
+            let current = '';
             const scrollY = window.pageYOffset;
 
-            sections.forEach(current => {
-                const sectionHeight = current.offsetHeight;
-                const sectionTop = current.offsetTop - 200;
-                const sectionId = current.getAttribute('id');
-                const links = document.querySelectorAll('a[href*=' + sectionId + ']');
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                // ২৫০ পিক্সেল অফসেট রাখা হয়েছে যাতে সেকশনে ঢোকার সাথে সাথেই মেনু চেঞ্জ হয়
+                if (scrollY >= sectionTop - 250) {
+                    current = section.getAttribute('id');
+                }
+            });
 
-                if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-                    links.forEach(l => l.classList.add('active'));
-                } else {
-                    links.forEach(l => l.classList.remove('active'));
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                // ডেস্কটপ এবং মোবাইল উভয় মেনুর লিংকেই কমলা কালার অ্যাপ্লাই হবে
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
                 }
             });
         });
 
-        const menuBtn = document.getElementById('menu-btn'), mobileMenu = document.getElementById('mobile-menu');
+        // ২. Mobile Menu Toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
         menuBtn.onclick = () => mobileMenu.classList.toggle('hidden');
         document.querySelectorAll('#mobile-menu a').forEach(l => l.onclick = () => mobileMenu.classList.add('hidden'));
 
-        const themeBtn = document.getElementById('theme-toggle'), html = document.documentElement;
-        if(localStorage.theme === 'dark') html.classList.add('dark');
+        // ৩. Theme Toggle (Dark/Light Mode)
+        const themeBtn = document.getElementById('theme-toggle'), themeIcon = document.getElementById('theme-icon'), html = document.documentElement;
+        if(localStorage.theme === 'dark') { html.classList.add('dark'); themeIcon.innerText = '☀️'; }
         themeBtn.onclick = () => {
             html.classList.toggle('dark'); const isD = html.classList.contains('dark');
-            localStorage.theme = isD ? 'dark' : 'light';
+            localStorage.theme = isD ? 'dark' : 'light'; themeIcon.innerText = isD ? '☀️' : '🌙';
         }
 
-        function toggleGalleryModal() { const m = document.getElementById('all-photos-modal'); m.classList.toggle('hidden'); m.classList.toggle('flex'); }
+        // ৪. Gallery Modals
+        function toggleGalleryModal() { 
+            const m = document.getElementById('all-photos-modal'); 
+            m.classList.toggle('hidden'); 
+            m.classList.toggle('flex'); 
+        }
         function showFullImage(u, t, d) {
             document.getElementById('display-img').src = u;
             document.getElementById('display-title').innerText = t;
